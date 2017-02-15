@@ -1,5 +1,5 @@
 # TestFlight Instruction
-If you're testing through Test Flight, please ignore the section at the bottom named #Test_Quupe (Xcode) directly.
+If you're testing through Test Flight, please ignore the section at the bottom named Test_Quupe (Xcode) directly.
 Check your mailbox to receive invitation email send by admin of apple developer account. Download Testflight from App Store and input the redeem code in the invitation email. 
 
 # Test_Quupe (Xcode)
