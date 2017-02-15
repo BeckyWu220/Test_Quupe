@@ -1,4 +1,8 @@
-# Test_Quupe
+# TestFlight Instruction
+If you're testing through Test Flight, please ignore the section at the bottom named Test_Quupe (Xcode) directly.
+Check your mailbox to receive invitation email send by admin of apple developer account. Download Testflight from App Store and input the redeem code in the invitation email. 
+
+# Test_Quupe (Xcode)
 
 This project is an Objective-C project, which need Xcode to launch and run. Please ensure that you have the Xcode installed first.
 
