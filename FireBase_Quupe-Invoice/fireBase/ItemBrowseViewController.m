@@ -101,11 +101,8 @@
             }
         }];*/
     }
-        
     
-    
-    
-    [[[ref child:@"items"] queryLimitedToLast: 45] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+    [[[[ref child:@"items"] queryOrderedByChild:@"time"] queryLimitedToLast:50] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSLog(@"EventListener!");
         
         NSMutableArray *newItemArray = [[NSMutableArray alloc] init];
@@ -113,7 +110,6 @@
         if (snapshot.exists)
         {
             NSDictionary *retrieveDataDict = snapshot.value;
-            NSLog(@"%@", retrieveDataDict);
             
             for (int i=0; i<[retrieveDataDict allValues].count; i++) {
                 Item *item = [[Item alloc] initWithDictionary:[[retrieveDataDict allValues] objectAtIndex:i] Key:[[retrieveDataDict allKeys] objectAtIndex:i]];
