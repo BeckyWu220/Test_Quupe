@@ -147,14 +147,30 @@
     NSLog(@"Generate Request Key: %@", key);
     
     NSDictionary *request = @{@"borrower": appDelegate.currentUser.uid,
+                              @"comment": @"0",
+                              @"delfee": @"$0",
                               @"iName": currentItem.title,
+                              @"insfee": @"$0",
+                              @"invoice": @"0",
                               @"iPic": [NSString stringWithFormat:@"%@", currentItem.photo],
                               @"itemNo": currentItem.key,
                               @"lender": currentItem.uid,
+                              @"payfee": @"$0",/*payment processing fee for Stripe. 2.7% of total plus 30 cents.*/
+                              @"payment": @"Pending",/*default value = @"Pending", will be changed into @"Paid using Credit Card" after the request has been paid.*/
+                              @"perDay": @"$0",
                               @"period": itemRentRange,
+                              @"pref": @"None",/*defaulty @"None", might change to @"Added delivery", @"Added insurance", or@"Added delivery and insurance"*/
+                              @"rating": @"0",
+                              @"rCalDays": [NSString stringWithFormat:@"%d", itemRentDay],
                               @"rDay": [NSString stringWithFormat:@"%d", itemRentDay],
-                              @"rTotal": [NSString stringWithFormat:@"$%.2f", itemRentalPrice],
-                              @"status": @"requested"};
+                              @"review": @"0",/*0 means a user hasn't give review yet.*/
+                              @"rTotal": [NSString stringWithFormat:@"$%.2f", itemRentalPrice],/*how much the borrower need to pay.*/
+                              @"serfee":@"$0",/*Quupe service fee. 20% of total.*/
+                              @"status": @"requested",
+                              @"subtotal": @"$0",/*how much a lender is getting after paying service fee and payment processing fee for Stripe.*/
+                              @"time": [FIRServerValue timestamp],
+                              @"token": @"",/*payment token from Stripe*/
+                              @"transaction": @"0"/*0 means a use hasn't pay yet. Will switch to 1 after payment.*/};
     
     [[[ref child:@"requests"] child:key] setValue:request withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
         if (error) {
