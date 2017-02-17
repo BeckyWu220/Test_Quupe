@@ -187,6 +187,25 @@
     //target user is lender, add node under transaction->outgoing
     [[[[[[ref child:@"users-detail"] child:[itemInfo objectForKey:@"targetUID"]] child:@"transactions"] child:@"outgoing"] child:key] setValue:transDic];
     
+    //Update requests node under lender and borrower's chats->items node, and parent requests node.
+    NSMutableArray *requestRefs = [[NSMutableArray alloc] init];
+    NSString *itemKey = [itemInfo objectForKey:@"key"];
+    
+    FIRDatabaseReference *requestRef_1 = [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:[itemInfo objectForKey:@"targetUID"]] child:@"items"] child:itemKey];
+    [requestRefs addObject:requestRef_1];
+    
+    FIRDatabaseReference *requestRef_2 = [[[[[[ref child:@"users-detail"] child:[itemInfo objectForKey:@"targetUID"]] child:@"chats"] child:appDelegate.currentUser.uid] child:@"items"] child:itemKey];
+    [requestRefs addObject:requestRef_2];
+    
+    FIRDatabaseReference *requestRef_3 = [[ref child:@"requests"] child:itemKey];
+    [requestRefs addObject:requestRef_3];
+    
+    for (int i=0; i<3; i++) {
+        [[[requestRefs objectAtIndex:i] child:@"payment"] setValue:@"Paid using Credit Card"];
+        [[[requestRefs objectAtIndex:i] child:@"transaction"] setValue:@"1"];
+        [[[requestRefs objectAtIndex:i] child:@"token"] setValue:token];
+    }
+    
     [[[ref child:@"transactions"] child:key] setValue:transDic];
     
     [self SetItemStatusTo:@"paid" ItemKey:[itemInfo objectForKey:@"key"]TargetUID:[itemInfo objectForKey:@"targetUID"]];

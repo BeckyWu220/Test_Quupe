@@ -399,10 +399,10 @@
     
     NSString *key = [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"transactions"] child:@"incoming"] childByAutoId].key;
     NSDictionary *transDic = @{@"borrower": appDelegate.currentUser.uid,
-                               @"iDays": @"Default Days",
+                               @"iDays": [itemInfo objectForKey:@"rDay"],
                                @"iID": [itemInfo objectForKey:@"itemNo"],
                                @"iName": [itemInfo objectForKey:@"iName"],
-                               @"iPrice": @"$0",
+                               @"iPrice": [itemInfo objectForKey:@"rTotal"],
                                @"id": token,
                                @"key": key,
                                @"lender": [itemInfo objectForKey:@"targetUID"],
@@ -412,6 +412,24 @@
     [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"transactions"] child:@"incoming"] child:key] setValue:transDic];
     //target user is lender, add node under transaction->outgoing
     [[[[[[ref child:@"users-detail"] child:[itemInfo objectForKey:@"targetUID"]] child:@"transactions"] child:@"outgoing"] child:key] setValue:transDic];
+    
+    //Update requests node under lender and borrower's chats->items node, and parent requests node.
+    NSMutableArray *requestRefs = [[NSMutableArray alloc] init];
+    
+    FIRDatabaseReference *requestRef_1 = [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:[itemInfo objectForKey:@"targetUID"]] child:@"items"] child:self.itemKey];
+    [requestRefs addObject:requestRef_1];
+    
+    FIRDatabaseReference *requestRef_2 = [[[[[[ref child:@"users-detail"] child:[itemInfo objectForKey:@"targetUID"]] child:@"chats"] child:appDelegate.currentUser.uid] child:@"items"] child:self.itemKey];
+    [requestRefs addObject:requestRef_2];
+    
+    FIRDatabaseReference *requestRef_3 = [[ref child:@"requests"] child:self.itemKey];
+    [requestRefs addObject:requestRef_3];
+    
+    for (int i=0; i<3; i++) {
+        [[[requestRefs objectAtIndex:i] child:@"payment"] setValue:@"Paid using Credit Card"];
+        [[[requestRefs objectAtIndex:i] child:@"transaction"] setValue:@"1"];
+        [[[requestRefs objectAtIndex:i] child:@"token"] setValue:token];
+    }
     
     [[[ref child:@"transactions"] child:key] setValue:transDic];
     
