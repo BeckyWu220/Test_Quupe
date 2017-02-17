@@ -116,6 +116,9 @@
         NSLog(@"Item Condition: %@", itemCondition);
         NSString *itemCategory = [[[cellData objectAtIndex:3] allValues] objectAtIndex:0];
         
+        NSString *itemPurchaseYear = [[[cellData objectAtIndex:4] allValues] objectAtIndex:0];
+        NSLog(@"Item Bought In Year : %@", itemPurchaseYear);
+        
         if ([itemCategory isEqualToString:@"Electronics"]) {
             itemCategory = @"ele";
         }else if ([itemCategory isEqualToString:@"Outdoor and Adventure"]){
@@ -144,7 +147,7 @@
             NSLog(@"Calculate and switch to new view.");
             AddItemViewController *addItemViewController = [[AddItemViewController alloc] init];
             addItemViewController.delegate = self;
-            [addItemViewController updateItemInfoWithTitle:itemName OriginalPrice:itemPrice Category:itemCategory Condition:itemCondition PhotoData:imgData];
+            [addItemViewController updateItemInfoWithTitle:itemName OriginalPrice:itemPrice Category:itemCategory Condition:itemCondition BoughtIn:itemPurchaseYear PhotoData:imgData];
             
             addItemViewController.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:addItemViewController animated:YES];

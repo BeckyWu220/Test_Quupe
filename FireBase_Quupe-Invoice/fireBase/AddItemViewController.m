@@ -21,6 +21,7 @@
     NSString *itemCondition;
     NSString *itemTitle;
     NSString *itemOriginalPrice;
+    NSString *itemPurchaseYear;
     NSData *itemPhotoData;
     NSURL *itemPhotoDownloadURL;
     
@@ -58,13 +59,14 @@
     //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"< Back" style:UIBarButtonItemStylePlain target:self action:@selector(back:)];
 }
 
-- (void)updateItemInfoWithTitle:(NSString *)title OriginalPrice:(NSString *)oPrice Category:(NSString *)category Condition:(NSString *)condition PhotoData:(NSData *)photoData
+- (void)updateItemInfoWithTitle:(NSString *)title OriginalPrice:(NSString *)oPrice Category:(NSString *)category Condition:(NSString *)condition BoughtIn:(NSString *)year PhotoData:(NSData *)photoData
 {
     [self updatePriceViewWithOriginalPrice:[oPrice floatValue] Category:category];
     itemTitle = title;
     itemOriginalPrice = oPrice;
     itemCategory = category;
     itemCondition = condition;
+    itemPurchaseYear = year;
     itemPhotoData = photoData;
 }
 
@@ -170,7 +172,7 @@
     NSArray *searchKeywords = [[itemTitle componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
     NSMutableDictionary *ser = [[NSMutableDictionary alloc] init];
     for (int i=0; i<searchKeywords.count; i++) {
-        [ser setObject:[searchKeywords objectAtIndex:i] forKey:[NSString stringWithFormat:@"%d",i]];
+        [ser setObject:[[searchKeywords objectAtIndex:i] lowercaseString] forKey:[NSString stringWithFormat:@"%d",i]];
     }
     
     NSDictionary *post = @{@"brand": @"",
@@ -186,7 +188,7 @@
                            @"location": @"mobile location",
                            @"model": @"",
                            @"note": @"",
-                           @"old": @"",/*bought in which year*/
+                           @"old": itemPurchaseYear,/*bought in which year*/
                            @"oPrice": itemOriginalPrice,
                            @"photo": [NSString stringWithFormat:@"%@", itemPhotoDownloadURL],
                            @"pickup": @"false",

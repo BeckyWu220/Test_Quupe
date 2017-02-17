@@ -31,6 +31,6 @@
 @property (strong, nonatomic) Item *currentItem;
 @property (strong, nonatomic) UIScrollView *scrollView;
 
-- (void)updateItemInfoWithTitle:(NSString *)title OriginalPrice:(NSString *)oPrice Category:(NSString *)category Condition:(NSString *)condition PhotoData:(NSData *)photoData;
+- (void)updateItemInfoWithTitle:(NSString *)title OriginalPrice:(NSString *)oPrice Category:(NSString *)category Condition:(NSString *)condition BoughtIn:(NSString *)year PhotoData:(NSData *)photoData;
 
 @end
