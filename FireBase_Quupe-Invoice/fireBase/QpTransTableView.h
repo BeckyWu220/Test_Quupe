@@ -19,7 +19,7 @@
 
 - (void)SwitchToCheckoutViewWithPrice:(NSDecimalNumber *)price ItemInfo:(NSDictionary *)itemInfo;
 - (void)SwitchToReviewViewForItem:(NSString *)itemKey TargetUID:(NSString *)targetUID;
-- (void)SwitchToInvoiceViewForItem:(NSString *)itemKey;
+- (void)SwitchToInvoiceViewForItem:(NSString *)itemKey TargetUID:(NSString *)targetUID;
 @end
 
 @interface QpTransTableView : UITableView <UITableViewDelegate, UITableViewDataSource, TransactionCellDelegate>

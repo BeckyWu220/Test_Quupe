@@ -156,19 +156,9 @@
     [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"reviews"] child:@"outgoing"] child:key] setValue:review];
     [[[[[[ref child:@"users-detail"] child:targetUID] child:@"reviews"] child:@"incoming"] child:key] setValue:review];
     
-    [[[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:self.itemKey] child:@"comment"] setValue:comment];
+    //[[[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:self.itemKey] child:@"comment"] setValue:comment];
     [[[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:self.itemKey] child:@"rating"] setValue:[NSString stringWithFormat:@"%d", (int)ratingView.currentRating]];
-    
-    [[[[ref child:@"requests"] child:self.itemKey] child:@"comment"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
-        if (snapshot.exists) {
-            int currentCommentAmount = [snapshot.value intValue];
-            currentCommentAmount += 1;
-            [[[[ref child:@"requests"] child:self.itemKey] child:@"comment"] setValue: [NSString stringWithFormat:@"%d", currentCommentAmount]];
-        }else {
-            NSLog(@"Snapshot Not Exist in requests->itemKey->commment in ReviewVC.");
-            [[[[ref child:@"requests"] child:self.itemKey] child:@"comment"] setValue:@"1"];
-        }
-    }];
+    [[[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:self.itemKey] child:@"review"] setValue:comment];
     
     __block float currentUserRate = 0.0;
     __block int currentRatingAmount = 0;

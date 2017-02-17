@@ -162,7 +162,7 @@
         currentItemInfo = [completedTrans objectAtIndex:indexPath.row];
     }
     
-    [self.controllerDelegate SwitchToInvoiceViewForItem:[currentItemInfo objectForKey:@"key"]];
+    [self.controllerDelegate SwitchToInvoiceViewForItem:[currentItemInfo objectForKey:@"key"] TargetUID: [currentItemInfo objectForKey:@"targetUID"]];
 }
 
 

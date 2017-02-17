@@ -143,10 +143,10 @@
     [self.navigationController pushViewController:paymentViewController animated:YES];
 }
 
-- (void)SwitchToInvoiceViewFromProfileForItem:(NSString *)itemKey
+- (void)SwitchToInvoiceViewFromProfileForItem:(NSString *)itemKey TargetUID:(NSString *)targetUID
 {
     NSLog(@"Switch From Profile to Invoice.");
-    InvoiceViewController *invoiceController = [[InvoiceViewController alloc] initWithItemKey:itemKey];
+    InvoiceViewController *invoiceController = [[InvoiceViewController alloc] initWithItemKey:itemKey TargetUID:targetUID];
     [self.navigationController pushViewController:invoiceController animated:YES];
 }
 

@@ -194,27 +194,23 @@
 
 - (void)checkReviewToDisplayReviewBtn
 {
-    [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"reviews"] child:@"outgoing"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+    [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:itemKey] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
         if (snapshot.exists) {
             NSDictionary *retrieveDataDict = snapshot.value;
-            NSArray *reviews = [retrieveDataDict allValues];
-            BOOL reviewed = NO;
             
-            for (int i=0; i<reviews.count; i++) {
-                if ([[[reviews objectAtIndex:i] objectForKey:@"forItem"] isEqualToString:itemKey]) {
-                    NSLog(@"Already Reviewed.");
-                    reviewed = YES;
-                    break;
-                }
-            }
-            
-            if (!reviewed) {
+            if (![retrieveDataDict objectForKey:@"review"] || [[retrieveDataDict objectForKey:@"review"] isEqualToString:@"0"]) {
+                //User didn't review for this item yet.
                 reviewBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 15, btnView.frame.size.width, 28) Title:@"Review"];
                 reviewBtn.delegate = self;
                 [btnView addSubview:reviewBtn];
-            }else {
+                NSLog(@"Not Reviewed Yet.");
+            }else{
+                NSLog(@"Already Reviewed.");
                 [reviewBtn removeFromSuperview];
             }
+            
+        }else{
+            NSLog(@"snapshot doesn't exist in users-detail->uid->chats->targetUID->items");
         }
     }];
 }

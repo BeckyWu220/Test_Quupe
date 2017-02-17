@@ -183,51 +183,63 @@
     lendTransTable.controllerDelegate = self;
     lendTransTable.simplified = YES;
     
-    
-    [[ref child:@"requests"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+    [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
         
-        if (snapshot.exists) {
+        if (snapshot.exists){
+            
             NSMutableArray *newBorrows = [[NSMutableArray alloc] init];
             NSMutableArray *newLends = [[NSMutableArray alloc] init];
             
             NSDictionary *retrieveDataDict = snapshot.value;
             
-            for (int i=0; i<[retrieveDataDict allValues].count; i++) {
-                
-                [[[retrieveDataDict allValues] objectAtIndex:i] setObject:[[retrieveDataDict allKeys] objectAtIndex:i] forKey:@"key"];//Add itemKey to item info dictionary.
-                
-                if ([[[[retrieveDataDict allValues] objectAtIndex:i] objectForKey:@"borrower"] isEqualToString:currentUser.uid]) {
+            NSLog(@"all targetUsers: %@", retrieveDataDict.allKeys);
+            
+            for (int i=0; i<retrieveDataDict.allKeys.count; i++) {
+                [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:[retrieveDataDict.allKeys objectAtIndex:i]] child:@"items"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+                    if (snapshot.exists) {
+                        NSDictionary *requestDic = snapshot.value;
+                        NSMutableArray *requests = [[NSMutableArray alloc] initWithArray:requestDic.allValues];
+                        for (int j=0; j<requests.count; j++) {
+                            NSMutableDictionary *request = [requests objectAtIndex:j];
+                            [request setObject:[requestDic.allKeys objectAtIndex:j] forKey:@"key"];
+                            
+                            if ([[request objectForKey:@"borrower"] isEqualToString:appDelegate.currentUser.uid]) {
+                                [request setValue:[request objectForKey:@"lender"] forKey:@"targetUID"];
+                                [request setValue:@"Borrowed" forKey:@"direction"];
+                                [newBorrows addObject:request];
+                                NSLog(@"???%@",request);
+                            }else if ([[request objectForKey:@"lender"] isEqualToString:appDelegate.currentUser.uid]){
+                                [request setObject:[request objectForKey:@"borrower"] forKey:@"targetUID"];
+                                [request setObject:@"Lent" forKey:@"direction"];
+                                [newLends addObject:request];
+                                NSLog(@"###%@",request);
+                            }
+                            
+                        }
+                        
+                        NSLog(@"New Borrows: %@", newBorrows);
+                        NSLog(@"New Lends: %@", newLends);
+                        
+                        borrowTransTable.tableData = newBorrows;
+                        lendTransTable.tableData = newLends;
+                        
+                        [borrowTransTable sortCells];
+                        [lendTransTable sortCells];
+                        
+                        [borrowTransTable reloadData];
+                        [lendTransTable reloadData];
+                        [self updateTabButtonNumber];
+                        
+                    }
                     
-                    [[[retrieveDataDict allValues] objectAtIndex:i] setObject:[[[retrieveDataDict allValues] objectAtIndex:i] objectForKey:@"lender"] forKey:@"targetUID"];
-                    
-                    [[[retrieveDataDict allValues] objectAtIndex:i] setObject:@"Borrowed" forKey:@"direction"];
-                    
-                    [newBorrows addObject:[[retrieveDataDict allValues] objectAtIndex:i]];
-                    
-                }else if ([[[[retrieveDataDict allValues] objectAtIndex:i] objectForKey:@"lender"] isEqualToString:currentUser.uid]){
-                    
-                    [[[retrieveDataDict allValues] objectAtIndex:i] setObject:[[[retrieveDataDict allValues] objectAtIndex:i] objectForKey:@"borrower"] forKey:@"targetUID"];
-                    
-                    [[[retrieveDataDict allValues] objectAtIndex:i] setObject:@"Lent" forKey:@"direction"];
-                    
-                    [newLends addObject:[[retrieveDataDict allValues] objectAtIndex:i]];
-                }
+                }];
             }
             
-            borrowTransTable.tableData = newBorrows;
-            lendTransTable.tableData = newLends;
-            
-            [borrowTransTable sortCells];
-            [lendTransTable sortCells];
-            
-            [borrowTransTable reloadData];
-            [lendTransTable reloadData];
-            [self updateTabButtonNumber];
         }else{
-            NSLog(@"Snapshot Not Exist in requests of ProfileView.");
+             NSLog(@"Snapshot Not Exist in chats of ProfileView.");
         }
-        
     }];
+    
 }
 
 - (void)switchToFeedback
@@ -396,9 +408,9 @@
     [self.delegate SwitchToReviewViewFromProfileForItem:itemKey TargetUID:targetUID];
 }
 
-- (void)SwitchToInvoiceViewForItem:(NSString *)itemKey
+- (void)SwitchToInvoiceViewForItem:(NSString *)itemKey TargetUID:(NSString *)targetUID
 {
-    [self.delegate SwitchToInvoiceViewFromProfileForItem:itemKey];
+    [self.delegate SwitchToInvoiceViewFromProfileForItem:itemKey TargetUID:targetUID];
 }
 
 #pragma QpTabButtonDelegate

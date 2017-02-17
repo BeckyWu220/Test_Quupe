@@ -127,10 +127,10 @@
     [self.navigationController pushViewController:reviewController animated:YES];
 }
 
-- (void)SwitchToInvoiceViewForItem:(NSString *)itemKey
+- (void)SwitchToInvoiceViewForItem:(NSString *)itemKey TargetUID:(NSString *)targetUID
 {
     NSLog(@"Switch To Invoice");
-    InvoiceViewController *invoiceController = [[InvoiceViewController alloc] initWithItemKey:itemKey];
+    InvoiceViewController *invoiceController = [[InvoiceViewController alloc] initWithItemKey:itemKey TargetUID:targetUID];
     [self.navigationController pushViewController:invoiceController animated:YES];
 }
 

@@ -20,7 +20,7 @@
 
 - (void)SwitchToReviewViewFromProfileForItem:(NSString *)itemKey TargetUID:(NSString *)targetUID;
 - (void)SwitchToCheckoutViewFromProfileWithPrice:(NSDecimalNumber *)price ItemInfo:(NSDictionary *)itemInfo;
-- (void)SwitchToInvoiceViewFromProfileForItem:(NSString *)itemKey;
+- (void)SwitchToInvoiceViewFromProfileForItem:(NSString *)itemKey TargetUID:(NSString *)targetUID;
 
 - (void)SwitchToItemInfoFromProfileWithItem:(Item *)item;
 

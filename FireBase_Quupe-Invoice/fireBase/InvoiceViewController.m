@@ -40,7 +40,7 @@
 @synthesize ref;
 @synthesize itemKey;
 
-- (id)initWithItemKey:(NSString *)key
+- (id)initWithItemKey:(NSString *)key TargetUID:(NSString *)uid
 {
     self = [super init];
     if (self) {
@@ -85,8 +85,9 @@
         [btnView addSubview:tipLabel];
         
         self.itemKey = key;
+        targetUID = uid;
         
-        [[[ref child:@"requests"] child:key] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+        [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:key] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
             if (snapshot.exists) {
                 NSDictionary *retrieveDataDict = snapshot.value;
                 NSLog(@"Invoice: %@", retrieveDataDict);
@@ -98,11 +99,9 @@
                 
                 if ([[retrieveDataDict objectForKey:@"borrower"] isEqualToString:appDelegate.currentUser.uid]) {
                     itemDirection = @"Borrowed";
-                    targetUID = [retrieveDataDict objectForKey:@"lender"];
                     
                 }else if ([[retrieveDataDict objectForKey:@"lender"] isEqualToString:appDelegate.currentUser.uid]){
                     itemDirection = @"Lent";
-                    targetUID = [retrieveDataDict objectForKey:@"borrower"];
                 }
                 [retrieveDataDict setValue:itemDirection forKey:@"direction"];
                 [retrieveDataDict setValue:targetUID forKey:@"targetUID"];
@@ -258,28 +257,24 @@
 
 - (void)checkReviewToDisplayReviewBtn
 {
-    [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"reviews"] child:@"outgoing"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+    [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:itemKey] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
         if (snapshot.exists) {
             NSDictionary *retrieveDataDict = snapshot.value;
-            NSArray *reviews = [retrieveDataDict allValues];
-            BOOL reviewed = NO;
             
-            for (int i=0; i<reviews.count; i++) {
-                if ([[[reviews objectAtIndex:i] objectForKey:@"forItem"] isEqualToString:itemKey]) {
-                    NSLog(@"Already Reviewed.");
-                    reviewed = YES;
-                    break;
-                }
-            }
-            
-            if (!reviewed) {
-                reviewBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 20, btnView.frame.size.width, 35) Title:@"Review"];
+            if (![retrieveDataDict objectForKey:@"review"] || [[retrieveDataDict objectForKey:@"review"] isEqualToString:@"0"]) {
+                //User didn't review for this item yet.
+                reviewBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 15, btnView.frame.size.width, 28) Title:@"Review"];
                 reviewBtn.delegate = self;
                 [btnView addSubview:reviewBtn];
-            }else {
+                NSLog(@"Not Reviewed Yet.");
+            }else{
+                NSLog(@"Already Reviewed.");
                 [reviewBtn removeFromSuperview];
                 tipLabel.text = @"You've reviewed this item.";
             }
+            
+        }else{
+            NSLog(@"snapshot doesn't exist in users-detail->uid->chats->targetUID->items");
         }
     }];
 }

@@ -21,6 +21,6 @@
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) NSString *itemKey;
 
-- (id)initWithItemKey:(NSString *)key;
+- (id)initWithItemKey:(NSString *)key TargetUID:(NSString *)uid;
 
 @end
