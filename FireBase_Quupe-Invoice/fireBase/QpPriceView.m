@@ -11,14 +11,11 @@
 @interface QpPriceView ()
 {
     NSMutableArray *priceLabelArray;
-    
-    float rentalWeek;
-    float rentalMonth;
 }
 @end
 
 @implementation QpPriceView
-@synthesize rentalDay;
+@synthesize rentalDay, rentalWeek, rentalMonth;
 
 - (id)initWithFrame:(CGRect)frame
 {

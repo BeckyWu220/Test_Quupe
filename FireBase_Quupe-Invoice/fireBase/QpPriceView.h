@@ -12,6 +12,8 @@
 @interface QpPriceView : UIView
 
 @property float rentalDay;
+@property float rentalWeek;
+@property float rentalMonth;
 
 - (void)calculateQuupePriceForItem:(Item *)item;
 - (void)calculateQuupePriceWithOriginalPrice:(float)oPrice Category:(NSString *)category;

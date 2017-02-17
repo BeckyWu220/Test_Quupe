@@ -167,6 +167,12 @@
     NSString *itemInfo = [[[[textTableView stopEditingAndReturnCellData] objectAtIndex:0] allValues] objectAtIndex:0];
     NSLog(@"Item Info: %@", itemInfo);
     
+    NSArray *searchKeywords = [[itemTitle componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+    NSMutableDictionary *ser = [[NSMutableDictionary alloc] init];
+    for (int i=0; i<searchKeywords.count; i++) {
+        [ser setObject:[searchKeywords objectAtIndex:i] forKey:[NSString stringWithFormat:@"%d",i]];
+    }
+    
     NSDictionary *post = @{@"brand": @"",
                            @"category": itemCategory,
                            @"condition": itemCondition,
@@ -186,9 +192,9 @@
                            @"pickup": @"false",
                            @"publish": @"false",
                            @"rentDay": [NSString stringWithFormat:@"%.2f", priceView.rentalDay],
-                           @"rentMonth": @"",/*for customize price*/
-                           @"rentWeek": @"",
-                           @"ser": @{@"0": @"itemTitle", @"1": @"itemTitle"},
+                           @"rentMonth": [NSString stringWithFormat:@"%.2f", priceView.rentalMonth],/*for customize price*/
+                           @"rentWeek": [NSString stringWithFormat:@"%.2f", priceView.rentalWeek],
+                           @"ser": ser,
                            @"starCount": @"0",/*how many people likes this item.*/
                            @"stars": @{},/*which user likes this item.*/
                            @"time" : [FIRServerValue timestamp],
