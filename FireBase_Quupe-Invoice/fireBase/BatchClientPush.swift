@@ -97,6 +97,7 @@ public class BatchClientPush: NSObject, URLSessionDelegate {
             if let data = data {
                 stringResponseData = String(data: data, encoding: String.Encoding.utf8)
             }
+            print("StringResponseData: \(stringResponseData)")
             
             var userFacingError = error as? NSError
             
