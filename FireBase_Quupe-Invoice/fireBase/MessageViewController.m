@@ -69,12 +69,12 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] removeAllObservers];
+    [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"messages"] removeAllObservers];
 }
 
 - (void)observeMessages
 {
-    FIRDatabaseQuery *msgQuery = [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] queryLimitedToLast:25];
+    FIRDatabaseQuery *msgQuery = [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"messages"] queryLimitedToLast:25];
     [msgQuery observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         
         if (snapshot.exists) {
@@ -83,24 +83,22 @@
             //set current user's seen node to 0 means that current user has read all messages from the target user.
             [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"status"] child:@"seen"] setValue:@"0"];
             
-            if (![snapshot.key isEqualToString:@"items"] && ![snapshot.key isEqualToString:@"notify"] && ![snapshot.key isEqualToString:@"status"] && ![snapshot.key isEqualToString:@"time"] && ![snapshot.key isEqualToString:@"transactions"])
-            {
-                NSString *name = [snapshot.value objectForKey:@"name"];
-                NSString *text = [snapshot.value objectForKey:@"text"];
-                
-                NSString *time = [snapshot.value objectForKey:@"time"];
-                NSTimeInterval timeInterval = [time doubleValue] / 1000.0f;
-                NSDate *date = [NSDate dateWithTimeIntervalSince1970: timeInterval];
-                NSLog(@"GMT TIME: %@", date);
-                
-                /*NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-                 [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                 [dateFormat setTimeZone:[NSTimeZone localTimeZone]];
-                 NSLog(@"LOCAL TIME: %@", [dateFormat stringFromDate:date]);*/
-                
-                [self addMessageWithName:name Text:text Date:date];
-                [self finishReceivingMessage];
-            }
+            NSString *name = [snapshot.value objectForKey:@"name"];
+            NSString *text = [snapshot.value objectForKey:@"text"];
+            
+            NSString *time = [snapshot.value objectForKey:@"time"];
+            NSTimeInterval timeInterval = [time doubleValue] / 1000.0f;
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970: timeInterval];
+            NSLog(@"GMT TIME: %@", date);
+            
+            /*NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+             [dateFormat setTimeZone:[NSTimeZone localTimeZone]];
+             NSLog(@"LOCAL TIME: %@", [dateFormat stringFromDate:date]);*/
+            
+            [self addMessageWithName:name Text:text Date:date];
+            [self finishReceivingMessage];
+            
         }else{
             NSLog(@"Snapshot Not Exist in users-detail->currentUserUID->chats->seen of MessageVC.");
         }
@@ -256,17 +254,17 @@
 
 - (void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    NSString *key = [[ref child:@"items"] childByAutoId].key;
+    NSString *key = [[ref child:@"messages"] childByAutoId].key;
     //The missing of img node may cause problems, need to refine later.
-    NSLog(@"SEND BUTTON: %@",appDelegate.currentUser.name);
+    NSLog(@"Send Message to: %@, messagesId: %@",appDelegate.currentUser.name, key);
     NSDictionary *msgDic = @{@"name": appDelegate.currentUser.name,
                              @"photoUrl": appDelegate.currentUser.imgURL,
                              @"text": text,
                              @"time": [FIRServerValue timestamp]};
     
-    [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:key] setValue:msgDic];
+    [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"messages"] child:key] setValue:msgDic];
     
-    [[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:key] setValue:msgDic];
+    [[[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:@"messages"] child:key] setValue:msgDic];
     
     [[[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:@"status"] child:@"seen"] setValue:@"1"];//set seen node to 1 means the target user has an unread message.
     

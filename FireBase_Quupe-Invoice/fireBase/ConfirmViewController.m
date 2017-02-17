@@ -176,7 +176,7 @@
 
 - (void)generateMessage
 {
-    NSString *key = [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:currentItem.uid] childByAutoId].key;
+    NSString *key = [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:currentItem.uid] child:@"messages"] childByAutoId].key;
     NSLog(@"Generate Message Key: %@", key);
     
     NSDictionary *msgDic = @{@"name": appDelegate.currentUser.name,
@@ -187,9 +187,9 @@
     
     
     //This might have problems because the key is the same in both nodes, but the key is generated as the rule of lender's uid using childByAutoId method.
-    [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:currentItem.uid] child:key] setValue:msgDic];
+    [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:currentItem.uid] child:@"messages"] child:key] setValue:msgDic];
     
-    [[[[[[ref child:@"users-detail"] child:currentItem.uid] child:@"chats"] child:appDelegate.currentUser.uid] child:key] setValue:msgDic];
+    [[[[[[[ref child:@"users-detail"] child:currentItem.uid] child:@"chats"] child:appDelegate.currentUser.uid] child:@"messages"] child:key] setValue:msgDic];
     
     [[[[[[[ref child:@"users-detail"] child:currentItem.uid] child:@"chats"] child:appDelegate.currentUser.uid] child:@"status"] child:@"seen"] setValue:@"1"];
     //set seen node to 1 means the target user has an unread message.
