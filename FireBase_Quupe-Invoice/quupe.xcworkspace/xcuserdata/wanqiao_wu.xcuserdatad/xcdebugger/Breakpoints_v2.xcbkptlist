@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "fireBase/AddItemViewController.m"
-            timestampString = "506580369.949143"
+            timestampString = "509026439.276644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258">
+            startingLineNumber = "276"
+            endingLineNumber = "276">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

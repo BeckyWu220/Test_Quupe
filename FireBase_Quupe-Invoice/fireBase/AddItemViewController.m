@@ -167,16 +167,34 @@
     NSString *itemInfo = [[[[textTableView stopEditingAndReturnCellData] objectAtIndex:0] allValues] objectAtIndex:0];
     NSLog(@"Item Info: %@", itemInfo);
     
-    NSDictionary *post = @{@"category": itemCategory,
+    NSDictionary *post = @{@"brand": @"",
+                           @"category": itemCategory,
                            @"condition": itemCondition,
+                           @"deliver": @"false",
+                           @"featr": @"0",
+                           @"iid": key,
                            @"info": itemInfo,
+                           @"keyword": itemTitle,
                            @"lender": appDelegate.currentUser.name,
+                           @"live": @"1",
+                           @"location": @"mobile location",
+                           @"model": @"",
+                           @"note": @"",
+                           @"old": @"",/*bought in which year*/
                            @"oPrice": itemOriginalPrice,
                            @"photo": [NSString stringWithFormat:@"%@", itemPhotoDownloadURL],
+                           @"pickup": @"false",
+                           @"publish": @"false",
                            @"rentDay": [NSString stringWithFormat:@"%.2f", priceView.rentalDay],
-                           @"starCount": @"default",
+                           @"rentMonth": @"",/*for customize price*/
+                           @"rentWeek": @"",
+                           @"ser": @{@"0": @"itemTitle", @"1": @"itemTitle"},
+                           @"starCount": @"0",/*how many people likes this item.*/
+                           @"stars": @{},/*which user likes this item.*/
+                           @"time" : [FIRServerValue timestamp],
                            @"title": itemTitle,
-                           @"uid": appDelegate.currentUser.uid};
+                           @"uid": appDelegate.currentUser.uid,
+                           @"vtag": @"1"/*@"1":Quupe Calculated Price, @"0":User Customized Price*/};
     
     [[[ref child:@"items"] child:key] setValue:post];
     
