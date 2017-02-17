@@ -20,6 +20,6 @@
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 
-- (id)initWithItem:(Item *)item RentDay:(int)rentDay TotalPrice:(float) rentalPrice RentRange:(NSString *)rentRange;
+- (id)initWithItem:(Item *)item RentDay:(int)rentDay TotalPrice:(float) rentalPrice RentRange:(NSString *)rentRange RentalPerDay:(float)rentalDay;
 
 @end

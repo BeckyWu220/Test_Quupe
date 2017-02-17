@@ -218,7 +218,8 @@
             NSString *rentRange = [NSString stringWithFormat:@"%@ to %@", [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate]];
             NSLog(@"RENT RANGE: %@", rentRange);
             
-            ConfirmViewController *confirmController = [[ConfirmViewController alloc] initWithItem:self.currentItem RentDay:rentDay TotalPrice:rentalPrice RentRange:rentRange];
+            ConfirmViewController *confirmController = [[ConfirmViewController alloc] initWithItem:self.currentItem RentDay:rentDay TotalPrice:rentalPrice RentRange:rentRange RentalPerDay:priceView.rentalDay];
+            
             [self.navigationController pushViewController:confirmController animated:YES];
         }else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reminder" message:@"Your rental info contains errors or is not completed." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];

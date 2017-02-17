@@ -21,6 +21,7 @@
     int itemRentDay;
     float itemRentalPrice;
     NSString *itemRentRange;
+    float itemRentalPerDay;
     
     float deliveryFee;
     float insuranceFee;
@@ -36,7 +37,7 @@
 @synthesize scrollView;
 @synthesize ref;
 
-- (id)initWithItem:(Item *)item RentDay:(int)rentDay TotalPrice:(float) rentalPrice RentRange:(NSString *)rentRange
+- (id)initWithItem:(Item *)item RentDay:(int)rentDay TotalPrice:(float) rentalPrice RentRange:(NSString *)rentRange RentalPerDay:(float)rentalDay
 {
     self = [super init];
     if (self) {
@@ -48,6 +49,7 @@
         itemRentDay = rentDay;
         itemRentalPrice = rentalPrice;
         itemRentRange = rentRange;
+        itemRentalPerDay = rentalDay;
         
         deliveryFee = 0.0f;
         insuranceFee = 0.0f;
@@ -148,16 +150,16 @@
     
     NSDictionary *request = @{@"borrower": appDelegate.currentUser.uid,
                               @"comment": @"0",
-                              @"delfee": @"$0",
+                              @"delfee": [NSString stringWithFormat:@"$%.2f", deliveryFee],
                               @"iName": currentItem.title,
-                              @"insfee": @"$0",
+                              @"insfee": [NSString stringWithFormat:@"$%.2f", insuranceFee],
                               @"invoice": @"0",
                               @"iPic": [NSString stringWithFormat:@"%@", currentItem.photo],
                               @"itemNo": currentItem.key,
                               @"lender": currentItem.uid,
-                              @"payfee": @"$0",/*payment processing fee for Stripe. 2.7% of total plus 30 cents.*/
+                              @"payfee": [NSString stringWithFormat:@"$%.2f", itemRentalPrice*0.027f+0.30f],/*payment processing fee for Stripe. 2.7% of total plus 30 cents.*/
                               @"payment": @"Pending",/*default value = @"Pending", will be changed into @"Paid using Credit Card" after the request has been paid.*/
-                              @"perDay": @"$0",
+                              @"perDay": [NSString stringWithFormat:@"$%.2f",itemRentalPerDay],
                               @"period": itemRentRange,
                               @"pref": @"None",/*defaulty @"None", might change to @"Added delivery", @"Added insurance", or@"Added delivery and insurance"*/
                               @"rating": @"0",
@@ -165,11 +167,11 @@
                               @"rDay": [NSString stringWithFormat:@"%d", itemRentDay],
                               @"review": @"0",/*0 means a user hasn't give review yet.*/
                               @"rTotal": [NSString stringWithFormat:@"$%.2f", itemRentalPrice],/*how much the borrower need to pay.*/
-                              @"serfee":@"$0",/*Quupe service fee. 20% of total.*/
+                              @"serfee":[NSString stringWithFormat:@"$%.2f", itemRentalPrice*0.20f],/*Quupe service fee. 20% of total.*/
                               @"status": @"requested",
-                              @"subtotal": @"$0",/*how much a lender is getting after paying service fee and payment processing fee for Stripe.*/
+                              @"subtotal": [NSString stringWithFormat:@"$%.2f", itemRentalPrice-itemRentalPrice*0.20f-itemRentalPrice*0.027f-0.30f],/*how much a lender is getting after paying service fee and payment processing fee for Stripe.*/
                               @"time": [FIRServerValue timestamp],
-                              @"token": @"",/*payment token from Stripe*/
+                              @"token": @"0",/*payment token from Stripe*/
                               @"transaction": @"0"/*0 means a use hasn't pay yet. Will switch to 1 after payment.*/};
     
     [[[ref child:@"requests"] child:key] setValue:request withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
@@ -286,7 +288,7 @@
             }else if ([currentOption isEqualToString:@"Meet Up"]){
                 deliveryFee = 0.0f;
             }else if ([currentOption isEqualToString:@"Delivery"]){
-                deliveryFee = 5.0f;
+                deliveryFee = 10.0f;
             }
             [breakdownView setDeliveryPrice:deliveryFee];
             
@@ -294,7 +296,7 @@
             //insurance
             //[@"Yes", @"No"
             if ([currentOption isEqualToString:@"Yes"]){
-                insuranceFee = 6.0f;
+                insuranceFee = 5.0f;
             }else{
                 insuranceFee = 0.0f;
             }
