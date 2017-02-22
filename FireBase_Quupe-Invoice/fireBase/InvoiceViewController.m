@@ -84,6 +84,41 @@
         tipLabel.numberOfLines = 0;
         [btnView addSubview:tipLabel];
         
+        acceptBtn = [[QpButton alloc] initWithFrame:CGRectZero Title:@"Accept"];
+        [btnView addSubview:acceptBtn];
+        acceptBtn.delegate = self;
+        acceptBtn.hidden = YES;
+        
+        cancelBtn = [[QpButton alloc] initWithFrame:CGRectZero Title:@"Cancel"];
+        [btnView addSubview:cancelBtn];
+        cancelBtn.delegate = self;
+        cancelBtn.hidden = YES;
+        
+        payBtn = [[QpButton alloc] initWithFrame:CGRectZero Title:@"Pay"];
+        [btnView addSubview:payBtn];
+        payBtn.delegate = self;
+        payBtn.hidden = YES;
+        
+        rentBtn = [[QpButton alloc] initWithFrame:CGRectZero Title:@"Rented"];
+        [btnView addSubview:rentBtn];
+        rentBtn.delegate = self;
+        rentBtn.hidden = YES;
+        
+        returnBtn = [[QpButton alloc] initWithFrame:CGRectZero Title:@"Returned"];
+        [btnView addSubview:returnBtn];
+        returnBtn.delegate = self;
+        rentBtn.hidden = YES;
+        
+        completeBtn = [[QpButton alloc] initWithFrame:CGRectZero Title:@"Complete"];
+        [btnView addSubview:completeBtn];
+        completeBtn.delegate = self;
+        completeBtn.hidden = YES;
+        
+        reviewBtn = [[QpButton alloc] initWithFrame:CGRectZero Title:@"Review"];
+        [btnView addSubview:reviewBtn];
+        reviewBtn.delegate = self;
+        reviewBtn.hidden = YES;
+        
         self.itemKey = key;
         targetUID = uid;
         
@@ -131,59 +166,51 @@
 
 - (void)loadButtonsWithItemStatus:(NSString *)itemStatus
 {
-    [acceptBtn removeFromSuperview];
-    [cancelBtn removeFromSuperview];
-    [payBtn removeFromSuperview];
-    [rentBtn removeFromSuperview];
-    [returnBtn removeFromSuperview];
-    [completeBtn removeFromSuperview];
-    [reviewBtn removeFromSuperview];
-    
     tipLabel.text = @"";
+    acceptBtn.hidden = YES;
+    cancelBtn.hidden = YES;
+    payBtn.hidden = YES;
+    rentBtn.hidden = YES;
+    returnBtn.hidden = YES;
+    completeBtn.hidden = YES;
+    reviewBtn.hidden = YES;
     
     if ([itemStatus isEqualToString:@"requested"])
     {
         //Show AcceptBtn and CancelBtn to Lender, CancelBtn to Borrower
         if ([itemDirection isEqualToString:@"Lent"])
         {
-            acceptBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 0, btnView.frame.size.width, 35) Title:@"Accept"];
-            acceptBtn.delegate = self;
-            [btnView addSubview:acceptBtn];
+            acceptBtn.frame = CGRectMake(0, 0, btnView.frame.size.width, 35);
+            acceptBtn.hidden = NO;
             
-            cancelBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, acceptBtn.frame.size.height+4, btnView.frame.size.width, 35) Title:@"Cancel"];
-            cancelBtn.delegate = self;
-            [btnView addSubview:cancelBtn];
+            cancelBtn.frame = CGRectMake(0, acceptBtn.frame.size.height+4, btnView.frame.size.width, 35);
+            cancelBtn.hidden = NO;
             
         }else if ([itemDirection isEqualToString:@"Borrowed"]) {
-            cancelBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 20, btnView.frame.size.width, 35) Title:@"Cancel"];
-            cancelBtn.delegate = self;
-            [btnView addSubview:cancelBtn];
+            cancelBtn.frame = CGRectMake(0, 20, btnView.frame.size.width, 35);
+            cancelBtn.hidden = NO;
         }
         
     }else if ([itemStatus isEqualToString:@"accepted"])
     {
         //Show PayBtn and CancelBtn to Borrower, CancelBtn to Lender
         if ([itemDirection isEqualToString:@"Lent"]) {
-            cancelBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 20, btnView.frame.size.width, 35) Title:@"Cancel"];
-            cancelBtn.delegate = self;
-            [btnView addSubview:cancelBtn];
+            cancelBtn.frame = CGRectMake(0, 20, btnView.frame.size.width, 35);
+            cancelBtn.hidden = NO;
         }else if ([itemDirection isEqualToString:@"Borrowed"]) {
-            payBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 0, btnView.frame.size.width, 35) Title:@"Pay"];
-            payBtn.delegate = self;
-            [btnView addSubview:payBtn];
+            payBtn.frame = CGRectMake(0, 0, btnView.frame.size.width, 35);
+            payBtn.hidden = NO;
             
-            cancelBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, payBtn.frame.size.height+4, btnView.frame.size.width, 35) Title:@"Cancel"];
-            cancelBtn.delegate = self;
-            [btnView addSubview:cancelBtn];
+            cancelBtn.frame = CGRectMake(0, payBtn.frame.size.height+4, btnView.frame.size.width, 35);
+            cancelBtn.hidden = NO;
         }
         
     }else if ([itemStatus isEqualToString:@"paid"])
     {
         //Show RentBtn to Lender, ReportBtn to Borrower
         if ([itemDirection isEqualToString:@"Lent"]){
-            rentBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 20, btnView.frame.size.width, 35) Title:@"Rented"];
-            rentBtn.delegate = self;
-            [btnView addSubview:rentBtn];
+            rentBtn.frame = CGRectMake(0, 20, btnView.frame.size.width, 35);
+            rentBtn.hidden = NO;
         }else if ([itemDirection isEqualToString:@"Borrowed"]) {
             //ReportBtn
             tipLabel.text = @"Your payment has been received. Please wait for lender to rent this item.";
@@ -196,17 +223,15 @@
             //ReportBtn
             tipLabel.text = @"Please wait for borrower to return this item.";
         }else if ([itemDirection isEqualToString:@"Borrowed"]) {
-            returnBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 20, btnView.frame.size.width, 35) Title:@"Returned"];
-            returnBtn.delegate = self;
-            [btnView addSubview:returnBtn];
+            returnBtn.frame = CGRectMake(0, 20, btnView.frame.size.width, 35);
+            returnBtn.hidden = NO;
         }
         
     }else if ([itemStatus isEqualToString:@"returned"]){
         //Show ReviewBtn to Borrower, CompleteBtn and ReportBtn to Lender
         if ([itemDirection isEqualToString:@"Lent"]){
-            completeBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 20, btnView.frame.size.width, 35) Title:@"Complete"];
-            completeBtn.delegate = self;
-            [btnView addSubview:completeBtn];
+            completeBtn.frame = CGRectMake(0, 20, btnView.frame.size.width, 35);
+            completeBtn.hidden = NO;
         }else if ([itemDirection isEqualToString:@"Borrowed"]) {
             
             [self checkReviewToDisplayReviewBtn];
@@ -263,13 +288,12 @@
             
             if (![retrieveDataDict objectForKey:@"review"] || [[retrieveDataDict objectForKey:@"review"] isEqualToString:@"0"]) {
                 //User didn't review for this item yet.
-                reviewBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 15, btnView.frame.size.width, 28) Title:@"Review"];
-                reviewBtn.delegate = self;
-                [btnView addSubview:reviewBtn];
+                reviewBtn.frame = CGRectMake(0, 15, btnView.frame.size.width, 28);
+                reviewBtn.hidden = NO;
                 NSLog(@"Not Reviewed Yet. - Invoice View");
             }else{
                 NSLog(@"Already Reviewed.");
-                [reviewBtn removeFromSuperview];
+                reviewBtn.hidden = YES;
                 tipLabel.text = @"You've reviewed this item. - Invoice View";
             }
             

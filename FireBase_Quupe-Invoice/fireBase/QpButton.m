@@ -13,6 +13,7 @@
 @synthesize titleText;
 @synthesize delegate;
 
+
 - (id)initWithFrame:(CGRect)frame Title:(NSString *)title
 {
     self = [super initWithFrame:frame];
