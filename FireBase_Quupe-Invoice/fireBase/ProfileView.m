@@ -95,7 +95,7 @@
     }];
     [self addSubview:reviewBtn];
     
-    bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(imgView.frame.origin.x, imgView.frame.origin.y + imgView.frame.size.height + 10.0f,self.frame.size.width - 2*imgView.frame.origin.x, 30)];
+    bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(imgView.frame.origin.x, imgView.frame.origin.y + imgView.frame.size.height,self.frame.size.width - 2*imgView.frame.origin.x, 10)];
     bioLabel.font = [UIFont fontWithName:@"SFUIText-Regular" size:12.0f];
     bioLabel.textColor = [UIColor colorWithRed:122.0f/255.0f green:122.0f/255.0f blue:122.0f/255.0f alpha:1.0f];
     bioLabel.textAlignment = NSTextAlignmentCenter;

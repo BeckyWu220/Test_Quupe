@@ -288,7 +288,7 @@
             
             if (![retrieveDataDict objectForKey:@"review"] || [[retrieveDataDict objectForKey:@"review"] isEqualToString:@"0"]) {
                 //User didn't review for this item yet.
-                reviewBtn.frame = CGRectMake(0, 15, btnView.frame.size.width, 28);
+                reviewBtn.frame = CGRectMake(0, 15, btnView.frame.size.width, 35);
                 reviewBtn.hidden = NO;
                 NSLog(@"Not Reviewed Yet. - Invoice View");
             }else{
