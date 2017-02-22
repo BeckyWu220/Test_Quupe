@@ -268,6 +268,8 @@
     
     [[[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:@"status"] child:@"seen"] setValue:@"1"];//set seen node to 1 means the target user has an unread message.
     
+    [[[[ref child:@"users-detail"] child:targetUID] child:@"noti"] setValue:@"1"];
+    
     [self sendBatchNotificationWithMessage:text];
     
     [self finishSendingMessage];

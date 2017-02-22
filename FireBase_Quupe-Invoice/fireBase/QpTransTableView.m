@@ -173,7 +173,7 @@
     
     NSString *key = [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"transactions"] child:@"incoming"] childByAutoId].key;
     NSDictionary *transDic = @{@"borrower": appDelegate.currentUser.uid,
-                               @"iDays": @"Default Days",
+                               @"iDays": [itemInfo objectForKey:@"rDay"],
                                @"iID": [itemInfo objectForKey:@"itemNo"],
                                @"iName": [itemInfo objectForKey:@"iName"],
                                @"iPrice": @"$0",

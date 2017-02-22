@@ -86,20 +86,24 @@
             [self.delegate DisplayAlertWithTitle:@"Error" Message:[error localizedDescription]];
         }else{
             NSLog(@"Create User %@", user.uid);
-            [[[ref child:@"users"] child:user.uid] setValue:@{@"username": @"Default Username", @"email": accountTextField.text}];
+            [[[ref child:@"users"] child:user.uid] setValue:@{@"username": @"Default", @"email": accountTextField.text}];
             [[[ref child:@"users-detail"] child:user.uid] setValue:@{@"Rating": @"0",
-                                                                     @"address": @"Default Address",
+                                                                     @"address": @"",
+                                                                     @"dob": @"",
                                                                      @"email": accountTextField.text,
                                                                      @"iBorrow": @"0",
                                                                      @"iLend": @"0",
-                                                                     @"name": @"Default Name",
-                                                                     @"phone": @"Default Phone",
-                                                                     @"text": @"Default Text",
+                                                                     @"name": @"Default",
+                                                                     @"noti": @"0",
+                                                                     @"phone": @"",
+                                                                     @"text": @"",
                                                                      @"uid": user.uid,
                                                                      @"account": @{@"earned": @"0",
                                                                                    @"paid": @"0",
                                                                                    @"rate": @"0",
-                                                                                   @"ratings": @"0"}}];
+                                                                                   @"ratings": @"0"},
+                                                                     @"updated": @"",
+                                                                     @"verified": @"no"}];
             
             [self.delegate SwitchToProfileViewWithUID:user.uid];
         }

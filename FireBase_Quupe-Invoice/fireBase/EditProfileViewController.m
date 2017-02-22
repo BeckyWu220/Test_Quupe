@@ -27,7 +27,7 @@
 {
     self = [super init];
     if (self) {
-        self.view.backgroundColor = [UIColor grayColor];
+        self.view.backgroundColor = [UIColor whiteColor];
         
         ref = [[FIRDatabase database] reference];
         
@@ -81,6 +81,7 @@
         NSString *value = [[[cellData objectAtIndex:i] allValues] objectAtIndex:0];
         [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:key] setValue:value];
     }
+    [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"updated"] setValue:[FIRServerValue timestamp]];
     
     [self updateCurrentUserInfo];
 }

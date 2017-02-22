@@ -53,6 +53,9 @@
 - (void)loadChatTargets
 {
     NSLog(@"RELOAD CHAT");
+    
+    [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"noti"] setValue:@"0"];
+    
     [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         
         if (snapshot.exists) {
