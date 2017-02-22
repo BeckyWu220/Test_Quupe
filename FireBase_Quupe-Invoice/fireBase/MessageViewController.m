@@ -255,12 +255,13 @@
 - (void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
     NSString *key = [[ref child:@"messages"] childByAutoId].key;
+    NSObject *timeStamp = [FIRServerValue timestamp];
     //The missing of img node may cause problems, need to refine later.
     NSLog(@"Send Message to: %@, messagesId: %@",appDelegate.currentUser.name, key);
     NSDictionary *msgDic = @{@"name": appDelegate.currentUser.name,
                              @"photoUrl": appDelegate.currentUser.imgURL,
                              @"text": text,
-                             @"time": [FIRServerValue timestamp]};
+                             @"time": timeStamp};
     
     [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"messages"] child:key] setValue:msgDic];
     
@@ -269,6 +270,9 @@
     [[[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:@"status"] child:@"seen"] setValue:@"1"];//set seen node to 1 means the target user has an unread message.
     
     [[[[ref child:@"users-detail"] child:targetUID] child:@"noti"] setValue:@"1"];
+    
+    [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"time"] setValue:timeStamp];
+    [[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:@"time"] setValue:timeStamp];
     
     [self sendBatchNotificationWithMessage:text];
     

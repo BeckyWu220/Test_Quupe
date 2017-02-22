@@ -219,6 +219,10 @@
     [[[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"items"] child:key] child:@"status"] setValue:itemStatus];
     [[[[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:@"items"] child:key] child:@"status"] setValue:itemStatus];
     
+    NSObject *timeStamp = [FIRServerValue timestamp];
+    [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:targetUID] child:@"time"] setValue:timeStamp];
+    [[[[[[ref child:@"users-detail"] child:targetUID] child:@"chats"] child:appDelegate.currentUser.uid] child:@"time"] setValue:timeStamp];
+    
     [self sendBatchNotificationWithItemStatus:itemStatus TargetUID:targetUID];
 }
 
