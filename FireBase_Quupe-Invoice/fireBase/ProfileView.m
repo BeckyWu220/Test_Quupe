@@ -114,7 +114,7 @@
     
     for (int i=0; i<3; i++) {
         
-        QpTapButton *tabBtn = [[QpTapButton alloc] initWithFrame:CGRectMake(i*self.frame.size.width/3, logoutBtn.frame.origin.y + logoutBtn.frame.size.height, self.frame.size.width/3, 60) Title:@"Test" Number:1];
+        QpTapButton *tabBtn = [[QpTapButton alloc] initWithFrame:CGRectMake(i*self.frame.size.width/3, logoutBtn.frame.origin.y + logoutBtn.frame.size.height, self.frame.size.width/3, 60) Title:@"Test" Number:0];
         tabBtn.delegate = self;
         
         switch (i) {

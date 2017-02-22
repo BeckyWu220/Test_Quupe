@@ -134,13 +134,8 @@
         }
         
     }else if ([itemStatus isEqualToString:@"completed"]){
-        //Show ReviewBtn to Lender
-        if ([itemDirection isEqualToString:@"Lent"]){
-            [self checkReviewToDisplayReviewBtn];
-        }else if ([itemDirection isEqualToString:@"Borrowed"]) {
-            //Detect if the borrower has reviewed to show rating or reviewBtn.
-            [self checkReviewToDisplayReviewBtn];
-        }
+        //Detect if lender/borrower has reviewed to show rating or reviewBtn.
+        [self checkReviewToDisplayReviewBtn];
         
     }else//when itemStatus is "cancelled"
     {
@@ -203,9 +198,9 @@
                 reviewBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 15, btnView.frame.size.width, 28) Title:@"Review"];
                 reviewBtn.delegate = self;
                 [btnView addSubview:reviewBtn];
-                NSLog(@"Not Reviewed Yet.");
+                NSLog(@"Not Reviewed Yet. - TransTable");
             }else{
-                NSLog(@"Already Reviewed.");
+                NSLog(@"Already Reviewed. - TransTable");
                 [reviewBtn removeFromSuperview];
             }
             

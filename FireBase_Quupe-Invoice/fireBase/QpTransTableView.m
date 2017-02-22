@@ -176,11 +176,11 @@
                                @"iDays": [itemInfo objectForKey:@"rDay"],
                                @"iID": [itemInfo objectForKey:@"itemNo"],
                                @"iName": [itemInfo objectForKey:@"iName"],
-                               @"iPrice": @"$0",
+                               @"iPrice": [itemInfo objectForKey:@"rTotal"],
                                @"id": token,
                                @"key": key,
                                @"lender": [itemInfo objectForKey:@"targetUID"],
-                               @"time": [FIRServerValue timestamp]};//Need to check with Zeeshan about the "id".
+                               @"time": [FIRServerValue timestamp]};
     
     //current user is borrower, add node under transaction->incoming
     [[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"transactions"] child:@"incoming"] child:key] setValue:transDic];

@@ -266,11 +266,11 @@
                 reviewBtn = [[QpButton alloc] initWithFrame:CGRectMake(0, 15, btnView.frame.size.width, 28) Title:@"Review"];
                 reviewBtn.delegate = self;
                 [btnView addSubview:reviewBtn];
-                NSLog(@"Not Reviewed Yet.");
+                NSLog(@"Not Reviewed Yet. - Invoice View");
             }else{
                 NSLog(@"Already Reviewed.");
                 [reviewBtn removeFromSuperview];
-                tipLabel.text = @"You've reviewed this item.";
+                tipLabel.text = @"You've reviewed this item. - Invoice View";
             }
             
         }else{

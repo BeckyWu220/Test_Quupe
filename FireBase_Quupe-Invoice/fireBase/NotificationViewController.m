@@ -70,35 +70,48 @@
             {
                 //Find status->seen node
                 [[[[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"chats"] child:[chatTargetUIDs objectAtIndex:i]] child:@"status"] child:@"seen"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
-                    NSLog(@"%@ SEEN CHANGE: %@", [chatTargetUIDs objectAtIndex:i], snapshot.value);
+                    if (snapshot.exists) {
+                        NSLog(@"%@ SEEN CHANGE: %@", [chatTargetUIDs objectAtIndex:i], snapshot.value);
+                        
+                        [userMsgStatusDic setObject:[NSString stringWithFormat:@"%@", snapshot.value] forKey:[chatTargetUIDs objectAtIndex:i]];
+                        
+                        [self.tableView reloadData];
+                        //[self.tableView beginUpdates];
+                        //[self.tableView endUpdates];
+                    }else {
+                        NSLog(@"Snapshot Not Exist in chats->status->seen in NotificationView.");
+                    }
                     
-                    [userMsgStatusDic setObject:[NSString stringWithFormat:@"%@", snapshot.value] forKey:[chatTargetUIDs objectAtIndex:i]];
                     
-                    [self.tableView reloadData];
-                    //[self.tableView beginUpdates];
-                    //[self.tableView endUpdates];
                 }];
                 
                 //Find target user's name and icon with targetUID from users-detail -> targetUID node
                 [[[ref child:@"users-detail"] child:[chatTargetUIDs objectAtIndex:i]] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                    NSDictionary *chatTargetInfo = snapshot.value;
                     
-                    NSString *userName = [chatTargetInfo objectForKey:@"name"];
-                    NSURL *userIconURL = [NSURL URLWithString:[chatTargetInfo objectForKey:@"img"]];
-                    
-                    if (!userIconURL) {
-                        userIconURL = [NSURL URLWithString:@"https://firebasestorage.googleapis.com/v0/b/quupe-restore.appspot.com/o/images%2F1476140364491.jpg?alt=media&token=e83160df-23c3-47c9-8067-413a4425691c"];
+                    if (snapshot.exists) {
+                        NSDictionary *chatTargetInfo = snapshot.value;
+                        NSLog(@"ChatTarget: %@", chatTargetInfo);
+                        
+                        NSString *userName = [chatTargetInfo objectForKey:@"name"];
+                        NSURL *userIconURL = [NSURL URLWithString:[chatTargetInfo objectForKey:@"img"]];
+                        
+                        if (!userIconURL) {
+                            userIconURL = [NSURL URLWithString:@"https://firebasestorage.googleapis.com/v0/b/quupe-restore.appspot.com/o/images%2F1476140364491.jpg?alt=media&token=e83160df-23c3-47c9-8067-413a4425691c"];
+                        }
+                        
+                        NSString *userUID = [chatTargetInfo objectForKey:@"uid"];
+                        
+                        NSArray *userInfo = [NSArray arrayWithObjects:userName, userIconURL, userUID, nil];//username index=0, userIconURL index=1, userUID index=2
+                        
+                        [newUserInfoArray addObject:userInfo];
+                        
+                        [self.tableView reloadData];
+                        //[self.tableView beginUpdates];
+                        //[self.tableView endUpdates];
+                    }else{
+                        NSLog(@"Snapshot Not Exist in users-detail->chatTargetUID of NotificationVC.");
                     }
                     
-                    NSString *userUID = [chatTargetInfo objectForKey:@"uid"];
-                    
-                    NSArray *userInfo = [NSArray arrayWithObjects:userName, userIconURL, userUID, nil];//username index=0, userIconURL index=1, userUID index=2
-                    
-                    [newUserInfoArray addObject:userInfo];
-                    
-                    [self.tableView reloadData];
-                    //[self.tableView beginUpdates];
-                    //[self.tableView endUpdates];
                 }];
                 
             }
