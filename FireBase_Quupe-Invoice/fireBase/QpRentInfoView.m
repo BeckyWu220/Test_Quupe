@@ -10,14 +10,16 @@
 
 @implementation QpRentInfoView
 
-- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange
+- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange PhotoURL:(NSURL *)photoURL
 {
     self = [super initWithFrame:frame];
     if (self) {
         self.frame = frame;
         
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, self.frame.size.width*0.3-5*2, self.frame.size.height - 5*2)];
-        imgView.backgroundColor = [UIColor grayColor];
+        QpAsyncImage *imgView = [[QpAsyncImage alloc] initWithFrame:CGRectMake(5, 5, self.frame.size.width*0.3-5*2, self.frame.size.height - 5*2)];
+        [imgView loadImageFromURL:photoURL];
+        imgView.layer.cornerRadius = 4.0f;
+        imgView.clipsToBounds = YES;
         [self addSubview:imgView];
         
         for (int i=0; i<3; i++) {
@@ -25,15 +27,17 @@
             switch (i) {
                 case 0:
                     label.text = itemName;
-                    label.font = [UIFont systemFontOfSize:20.0f];
+                    label.font = [UIFont fontWithName:@"SFUIText-Semibold" size:16.0f];
                     break;
                 case 1:
                     label.text = [NSString stringWithFormat:@"$%.2f", rentalPrice];
-                    label.font = [UIFont systemFontOfSize:14.0f];
+                    label.font = [UIFont fontWithName:@"SFUIText-Regular" size:14.0f];
+                    label.textColor = [UIColor colorWithRed:117.0/255.0f green:117.0/255.0f blue:117.0/255.0f alpha:1.0f];
                     break;
                 case 2:
                     label.text = rentRange;
-                    label.font = [UIFont systemFontOfSize:14.0f];
+                    label.font = [UIFont fontWithName:@"SFUIText-Regular" size:14.0f];
+                    label.textColor = [UIColor colorWithRed:117.0/255.0f green:117.0/255.0f blue:117.0/255.0f alpha:1.0f];
                     break;
                 default:
                     break;

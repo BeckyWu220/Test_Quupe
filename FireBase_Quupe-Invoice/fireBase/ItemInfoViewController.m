@@ -175,6 +175,9 @@
         textTableView.scrollDelegate = self;
         [scrollView addSubview:textTableView];
         
+        TextTableCell *totalPriceCell = [textTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+        totalPriceCell.contentTextView.editable = NO;
+        
         bookBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, textTableView.frame.origin.y + textTableView.frame.size.height, self.view.frame.size.width, self.view.frame.size.width/7.5f)];
         [bookBtn setTitle:@"BOOK" forState:UIControlStateNormal];
         

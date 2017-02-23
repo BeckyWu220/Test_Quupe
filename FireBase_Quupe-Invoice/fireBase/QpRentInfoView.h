@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QpAsyncImage.h"
 
 @interface QpRentInfoView : UIView
 
-- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange;
+- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange PhotoURL:(NSURL *)photoURL;
 
 @end

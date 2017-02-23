@@ -33,7 +33,6 @@
         
         imgView = [[QpAsyncImage alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 48.0f, 48.0f)];
         imgView.contentMode = UIViewContentModeScaleAspectFill;
-        imgView.backgroundColor = [UIColor grayColor];
         imgView.layer.cornerRadius = imgView.frame.size.width/2;
         imgView.clipsToBounds = YES;
         [self addSubview:imgView];

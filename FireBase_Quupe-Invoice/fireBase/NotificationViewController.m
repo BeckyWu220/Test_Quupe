@@ -96,7 +96,7 @@
                         NSURL *userIconURL = [NSURL URLWithString:[chatTargetInfo objectForKey:@"img"]];
                         
                         if (!userIconURL) {
-                            userIconURL = [NSURL URLWithString:@"https://firebasestorage.googleapis.com/v0/b/quupe-restore.appspot.com/o/images%2F1476140364491.jpg?alt=media&token=e83160df-23c3-47c9-8067-413a4425691c"];
+                            userIconURL = [NSURL URLWithString:@"https://firebasestorage.googleapis.com/v0/b/quupe-restore.appspot.com/o/images%2FdefaultUserIcon.png?alt=media&token=38c38519-38af-43e4-9d2e-452db783eec1"];
                         }
                         
                         NSString *userUID = [chatTargetInfo objectForKey:@"uid"];
