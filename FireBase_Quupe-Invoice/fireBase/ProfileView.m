@@ -207,18 +207,13 @@
                                 [request setValue:[request objectForKey:@"lender"] forKey:@"targetUID"];
                                 [request setValue:@"Borrowed" forKey:@"direction"];
                                 [newBorrows addObject:request];
-                                NSLog(@"???%@",request);
                             }else if ([[request objectForKey:@"lender"] isEqualToString:appDelegate.currentUser.uid]){
                                 [request setObject:[request objectForKey:@"borrower"] forKey:@"targetUID"];
                                 [request setObject:@"Lent" forKey:@"direction"];
                                 [newLends addObject:request];
-                                NSLog(@"###%@",request);
                             }
                             
                         }
-                        
-                        NSLog(@"New Borrows: %@", newBorrows);
-                        NSLog(@"New Lends: %@", newLends);
                         
                         borrowTransTable.tableData = newBorrows;
                         lendTransTable.tableData = newLends;

@@ -462,6 +462,32 @@
     
     [[[ref child:@"transactions"] child:key] setValue:transDic];
     
+    //increase total paid amount of current user.
+    [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"account"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+        if (snapshot.exists) {
+            float currentUserPaid = [[snapshot.value objectForKey:@"paid"] floatValue];
+            NSLog(@"Last paid: %.2f",currentUserPaid);
+            currentUserPaid += [[[itemInfo objectForKey:@"rTotal"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+            NSLog(@"Now paid: %.2f",currentUserPaid);
+            [[[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"account"] child:@"paid"] setValue:[NSString stringWithFormat:@"%.2f", currentUserPaid]];
+        }else{
+            NSLog(@"Snapshot Not Exist in users-detail->uid->account in InvoiceVC.");
+        }
+    }];
+    
+    //increase total earned amount of target user.
+    [[[[ref child:@"users-detail"] child:[itemInfo objectForKey:@"targetUID"]] child:@"account"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+        if (snapshot.exists) {
+            float targetUserEarned = [[snapshot.value objectForKey:@"earned"] floatValue];
+            NSLog(@"Last earned: %.2f",targetUserEarned);
+            targetUserEarned += [[[itemInfo objectForKey:@"rTotal"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+            NSLog(@"Now earned: %.2f",targetUserEarned);
+            [[[[[ref child:@"users-detail"] child:[itemInfo objectForKey:@"targetUID"]] child:@"account"] child:@"earned"] setValue:[NSString stringWithFormat:@"%.2f", targetUserEarned]];
+        }else{
+            NSLog(@"Snapshot Not Exist in users-detail->uid->account in InvoiceVC.");
+        }
+    }];
+    
     [self SetItemStatusTo:@"paid"];
 }
 

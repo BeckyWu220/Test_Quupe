@@ -248,11 +248,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "fireBase/ProfileView.m"
-            timestampString = "509432717.442589"
+            timestampString = "509574266.663383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "-loadInfoFromUser:"
             landmarkType = "7">
          </BreakpointContent>
