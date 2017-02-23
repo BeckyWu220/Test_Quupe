@@ -71,7 +71,7 @@
         textTableView.scrollDelegate = self;
         [scrollView addSubview:textTableView];
         
-        breakdownView = [[QpBreakdownView alloc] initWithFrame:CGRectMake(0, textTableView.frame.origin.y+textTableView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 25.0f*4) RentalPrice:rentalPrice];
+        breakdownView = [[QpBreakdownView alloc] initWithFrame:CGRectMake(0, textTableView.frame.origin.y+textTableView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 25.0f*6) RentalPrice:rentalPrice];
         [scrollView addSubview:breakdownView];
         
         confirmBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, breakdownView.frame.origin.y+breakdownView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 35.0f)];
@@ -166,7 +166,7 @@
                               @"rCalDays": [NSString stringWithFormat:@"%d", itemRentDay],
                               @"rDay": [NSString stringWithFormat:@"%d", itemRentDay],
                               @"review": @"0",/*0 means a user hasn't give review yet.*/
-                              @"rTotal": [NSString stringWithFormat:@"$%.2f", itemRentalPrice],/*how much the borrower need to pay.*/
+                              @"rTotal": [NSString stringWithFormat:@"$%.2f", itemRentalPrice+deliveryFee+insuranceFee],/*how much the borrower need to pay.*/
                               @"serfee":[NSString stringWithFormat:@"$%.2f", itemRentalPrice*0.20f],/*Quupe service fee. 20% of total.*/
                               @"status": @"requested",
                               @"subtotal": [NSString stringWithFormat:@"$%.2f", itemRentalPrice-itemRentalPrice*0.20f-itemRentalPrice*0.027f-0.30f],/*how much a lender is getting after paying service fee and payment processing fee for Stripe.*/
@@ -257,7 +257,7 @@
     scrollView.contentSize = currentScrollContentSize;
     
     //Update following UI position.
-    breakdownView.frame = CGRectMake(0, textTableView.frame.origin.y+newTableViewHeight, [[UIScreen mainScreen] bounds].size.width, 30.0f*4+44.0f);
+    breakdownView.frame = CGRectMake(0, textTableView.frame.origin.y+newTableViewHeight, [[UIScreen mainScreen] bounds].size.width, 25.0f*6+44.0f);
     confirmBtn.frame = CGRectMake(0, breakdownView.frame.origin.y+breakdownView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 35.0f);
 }
 
