@@ -87,6 +87,43 @@
     totalCell.priceLabel.text = [NSString stringWithFormat:@"$%.2f", grandTotal];
 }
 
+- (void)updateTableWithItemInfo:(NSDictionary *)itemInfo
+{
+    
+    float subtotal = [[[itemInfo objectForKey:@"subtotal"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+    float servicefee = [[[itemInfo objectForKey:@"serfee"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+    float processingfee = [[[itemInfo objectForKey:@"payfee"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+    float deliveryfee = [[[itemInfo objectForKey:@"delfee"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+    float insurancefee = [[[itemInfo objectForKey:@"insfee"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+    float total = [[[itemInfo objectForKey:@"rTotal"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+    
+    for (int i=0; i<priceDic.allValues.count; i++) {
+        BreakdownTableCell *cell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        switch (i) {
+            case 0:
+                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", subtotal];
+                break;
+            case 1:
+                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", servicefee];
+                break;
+            case 2:
+                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", processingfee];
+                break;
+            case 3:
+                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", deliveryfee];
+                break;
+            case 4:
+                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", insurancefee];
+                break;
+            case 5:
+                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", total];
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 #pragma UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

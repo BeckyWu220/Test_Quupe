@@ -16,4 +16,6 @@
 - (void)setDeliveryPrice:(float)price;
 - (void)setInsurancePrice:(float)price;
 
+- (void)updateTableWithItemInfo:(NSDictionary *)itemInfo;
+
 @end

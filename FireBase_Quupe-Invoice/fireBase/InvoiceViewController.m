@@ -20,6 +20,7 @@
     UILabel *rentalPeriodLabel;
     UILabel *itemStatusLabel;
     UILabel *totalPriceLabel;
+    QpBreakdownView *breakdownView;
     
     UIView *btnView;
     QpButton *acceptBtn;
@@ -72,7 +73,10 @@
         totalPriceLabel.textColor = [UIColor colorWithRed:51.0/255.0 green:51.0/255.0 blue:51.0/255.0 alpha:1.0f];
         [self.view addSubview:totalPriceLabel];
         
-        btnView = [[UIView alloc] initWithFrame:CGRectMake(10.0f, totalPriceLabel.frame.origin.y + totalPriceLabel.frame.size.height + 50.0f, self.view.frame.size.width - 20.0f, 35.0f*2+5.0f)];
+        breakdownView = [[QpBreakdownView alloc] initWithFrame:CGRectMake(0, totalPriceLabel.frame.origin.y + totalPriceLabel.frame.size.height + 10.0f, [[UIScreen mainScreen] bounds].size.width, 25.0f*6+44.0f) RentalPrice:[totalPriceLabel.text floatValue]];
+        [self.view addSubview:breakdownView];
+        
+        btnView = [[UIView alloc] initWithFrame:CGRectMake(10.0f, breakdownView.frame.origin.y + breakdownView.frame.size.height + 50.0f, self.view.frame.size.width - 20.0f, 35.0f*2+5.0f)];
         [self.view addSubview:btnView];
         
         tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, btnView.frame.size.width, btnView.frame.size.height)];
@@ -144,6 +148,8 @@
                 itemInfo = [[NSDictionary alloc] initWithDictionary:retrieveDataDict];
                 
                 [self loadButtonsWithItemStatus:itemStatusLabel.text];
+                
+                [breakdownView updateTableWithItemInfo:itemInfo];
                 
             }else{
                 NSLog(@"Snapshot Not Exist in requests->itemKey of InvoiceVC.");
