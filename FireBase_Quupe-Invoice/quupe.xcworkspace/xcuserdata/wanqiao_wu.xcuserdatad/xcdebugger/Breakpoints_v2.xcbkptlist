@@ -168,11 +168,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "fireBase/ProfileView.m"
-            timestampString = "506769075.94571"
+            timestampString = "509574892.885161"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "-loadInfoFromUser:"
             landmarkType = "7">
          </BreakpointContent>
@@ -232,11 +232,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "fireBase/ProfileView.m"
-            timestampString = "509424212.653382"
+            timestampString = "509574892.885161"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "-loadInfoFromUser:"
             landmarkType = "7">
          </BreakpointContent>
@@ -248,11 +248,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "fireBase/ProfileView.m"
-            timestampString = "509574266.663383"
+            timestampString = "509574892.885161"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "-loadInfoFromUser:"
             landmarkType = "7">
          </BreakpointContent>

@@ -95,6 +95,19 @@
     }];
     [self addSubview:reviewBtn];
     
+    UIButton *creditBtn = [[UIButton alloc] initWithFrame:CGRectMake(ratingView.frame.origin.x, ratingView.frame.origin.y+ratingView.frame.size.height + 10.0f, 150.0f, 20.0f)];
+    creditBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [creditBtn setTitleColor:[UIColor colorWithRed:145.0/255.0f green:144.0/255.0f blue:144.0/255.0f alpha:1.0f] forState:UIControlStateNormal];
+    creditBtn.titleLabel.font = [UIFont fontWithName:@"SFUIText-Regular" size:12.0f];
+    [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"account"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if (snapshot.exists) {
+            [creditBtn setTitle:[NSString stringWithFormat:@"Credits: $%.2f", [[snapshot.value objectForKey:@"earned"] floatValue]] forState:UIControlStateNormal];
+        } else {
+            NSLog(@"Snapshot Not Exist in users-detail->uid->account in ProfileView.");
+        }
+    }];
+    [self addSubview:creditBtn];
+    
     bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(imgView.frame.origin.x, imgView.frame.origin.y + imgView.frame.size.height,self.frame.size.width - 2*imgView.frame.origin.x, 10)];
     bioLabel.font = [UIFont fontWithName:@"SFUIText-Regular" size:12.0f];
     bioLabel.textColor = [UIColor colorWithRed:122.0f/255.0f green:122.0f/255.0f blue:122.0f/255.0f alpha:1.0f];
