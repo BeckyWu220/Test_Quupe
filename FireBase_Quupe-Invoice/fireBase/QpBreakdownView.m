@@ -97,31 +97,66 @@
     float insurancefee = [[[itemInfo objectForKey:@"insfee"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
     float total = [[[itemInfo objectForKey:@"rTotal"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
     
-    for (int i=0; i<priceDic.allValues.count; i++) {
-        BreakdownTableCell *cell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        switch (i) {
-            case 0:
-                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", subtotal];
-                break;
-            case 1:
-                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", servicefee];
-                break;
-            case 2:
-                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", processingfee];
-                break;
-            case 3:
-                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", deliveryfee];
-                break;
-            case 4:
-                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", insurancefee];
-                break;
-            case 5:
-                cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", total];
-                break;
-            default:
-                break;
+    NSString *direction = [itemInfo objectForKey:@"direction"];
+    if ([direction isEqualToString:@"Lent"]) {
+        //lender's invoice
+        for (int i=0; i<priceDic.allValues.count; i++) {
+            BreakdownTableCell *cell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            switch (i) {
+                case 0:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", total];
+                    break;
+                case 1:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"-$%.2f", servicefee];
+                    break;
+                case 2:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"-$%.2f", processingfee];
+                    break;
+                case 3:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", deliveryfee];
+                    break;
+                case 4:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", insurancefee];
+                    break;
+                case 5:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", subtotal];
+                    break;
+                default:
+                    break;
+            }
         }
+        
+    }else{
+        //borrower's invoice
+        for (int i=0; i<priceDic.allValues.count; i++) {
+            BreakdownTableCell *cell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            switch (i) {
+                case 0:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", subtotal];
+                    break;
+                case 1:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", servicefee];
+                    break;
+                case 2:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", processingfee];
+                    break;
+                case 3:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", deliveryfee];
+                    break;
+                case 4:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", insurancefee];
+                    break;
+                case 5:
+                    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", total];
+                    break;
+                default:
+                    break;
+            }
+        }
+        
     }
+    
+    
 }
 
 #pragma UITableViewDelegate
