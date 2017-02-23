@@ -10,7 +10,7 @@
 
 @interface QpBreakdownView ()
 {
-    NSMutableArray *tableData;
+    NSMutableDictionary *priceDic;
 }
 @end
 
@@ -44,14 +44,13 @@
         [headerView addSubview:headerLabel];
         self.tableHeaderView = headerView;
         
-        
-        tableData = [[NSMutableArray alloc] init];
-        [tableData addObject:[NSNumber numberWithFloat:itemRentalPrice-itemRentalPrice*0.20f-itemRentalPrice*0.027f-0.30f]];
-        [tableData addObject:[NSNumber numberWithFloat:itemRentalPrice*0.2]];//Service fee
-        [tableData addObject:[NSNumber numberWithFloat:itemRentalPrice*0.027f+0.30f]];//Stripe Payment Processing Fee
-        [tableData addObject:[NSNumber numberWithFloat:0.0f]];//Default delivery fee
-        [tableData addObject:[NSNumber numberWithFloat:0.0f]];//Default insurance fee
-        [tableData addObject:[NSNumber numberWithFloat:itemRentalPrice + 0.0f + 0.0f]];//Default grand total price
+        priceDic = [[NSMutableDictionary alloc] init];
+        [priceDic setValue:[NSNumber numberWithFloat:itemRentalPrice-itemRentalPrice*0.20f-itemRentalPrice*0.027f-0.30f] forKey:@"subtotal"];
+        [priceDic setValue:[NSNumber numberWithFloat:itemRentalPrice*0.2] forKey:@"service"];//Service fee
+        [priceDic setValue:[NSNumber numberWithFloat:itemRentalPrice*0.027f+0.30f] forKey:@"processing"];//Stripe Payment Processing Fee
+        [priceDic setValue:[NSNumber numberWithFloat:0.0f] forKey:@"delivery"];//Default delivery fee
+        [priceDic setValue:[NSNumber numberWithFloat:0.0f] forKey:@"insurance"];//Default insurance fee
+        [priceDic setValue:[NSNumber numberWithFloat:itemRentalPrice] forKey:@"total"];//Default grand total price
     }
     return self;
 }
@@ -61,7 +60,7 @@
     BreakdownTableCell *deliveryCell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
     
     deliveryCell.priceLabel.text = [NSString stringWithFormat:@"$%.2f", price];
-    [tableData replaceObjectAtIndex:3 withObject:[NSNumber numberWithFloat:price]];
+    [priceDic setValue:[NSNumber numberWithFloat:price] forKey:@"delivery"];
     
     [self calculateGrandTotal];
 }
@@ -71,7 +70,7 @@
     BreakdownTableCell *insuranceCell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
     
     insuranceCell.priceLabel.text = [NSString stringWithFormat:@"$%.2f", price];
-    [tableData replaceObjectAtIndex:4 withObject:[NSNumber numberWithFloat:price]];
+    [priceDic setValue:[NSNumber numberWithFloat:price] forKey:@"insurance"];
     
     [self calculateGrandTotal];
 }
@@ -80,9 +79,8 @@
 {
     float grandTotal = 0.0f;
     
-    for (int i=0; i<5; i++) {
-        NSLog(@"fee: %f", [[tableData objectAtIndex:i] floatValue]);
-        grandTotal += [[tableData objectAtIndex:i] floatValue];
+    for (int j=0; j<priceDic.allValues.count-1; j++) {
+        grandTotal += [[priceDic.allValues objectAtIndex:j] floatValue];
     }
     
     BreakdownTableCell *totalCell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0]];
@@ -119,29 +117,33 @@
     switch (indexPath.row) {
         case 0:
             cell.headerLabel.text = @"Subtotal";
+            cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", [[priceDic valueForKey:@"subtotal"] floatValue]];
             break;
         case 1:
             cell.headerLabel.text = @"Service Fee";
+            cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", [[priceDic valueForKey:@"service"] floatValue]];
             break;
         case 2:
             cell.headerLabel.text = @"Processing Fee";
+            cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", [[priceDic valueForKey:@"processing"] floatValue]];
             break;
         case 3:
             cell.headerLabel.text = @"Delivery";
+            cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", [[priceDic valueForKey:@"delivery"] floatValue]];
             break;
         case 4:
             cell.headerLabel.text = @"Insurance";
+            cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", [[priceDic valueForKey:@"insurance"] floatValue]];
             break;
         case 5:
-            cell.headerLabel.text = @"Grand Total";
+            cell.headerLabel.text = @"Total";
+            cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", [[priceDic valueForKey:@"total"] floatValue]];
             cell.priceLabel.font = cell.headerLabel.font = [UIFont fontWithName:@"SFUIText-Medium" size:16.0f];
             cell.priceLabel.textColor = cell.headerLabel.textColor = [UIColor colorWithRed:51.0/255.0 green:51.0/255.0 blue:51.0/255.0 alpha:1.0f];
             break;
         default:
             break;
     }
-    
-    cell.priceLabel.text = [NSString stringWithFormat: @"$%.2f", [[tableData objectAtIndex:indexPath.row] floatValue]];
     
     return cell;
 }
