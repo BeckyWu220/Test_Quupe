@@ -121,7 +121,7 @@
         [scrollView addSubview:infoLabel];
         
         UILabel *newestReviewTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, infoLabel.frame.origin.y+infoLabel.frame.size.height + 10.0f, [[UIScreen mainScreen] bounds].size.width - 2*10.0f, 20.0f)];
-        newestReviewTitleLabel.text = @"N Reviews";
+        newestReviewTitleLabel.text = @"Reviews";
         newestReviewTitleLabel.font = [UIFont fontWithName:@"SFUIText-Medium" size:16.0f];
         newestReviewTitleLabel.textColor = [UIColor colorWithRed:51.0/255.0 green:51.0/255.0 blue:51.0/255.0 alpha:1.0f];
         [scrollView addSubview:newestReviewTitleLabel];
