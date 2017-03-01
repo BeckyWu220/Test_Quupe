@@ -45,7 +45,7 @@
     if (self) {
         appDelegate = [[UIApplication sharedApplication] delegate];
         ref = [[FIRDatabase database] reference];
-        imagesRef = [[[FIRStorage storage] referenceForURL:@"gs://quupe-restore.appspot.com"] child:@"images"];
+        imagesRef = [[[[[FIRStorage storage] referenceForURL:@"gs://quupe-restore.appspot.com"] child:@"images"] child:@"items"] child:appDelegate.currentUser.uid];
     }
     return self;
 }
