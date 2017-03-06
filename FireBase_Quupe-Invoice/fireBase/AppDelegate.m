@@ -84,7 +84,13 @@
     
     if (![currentUser.uid isEqualToString:@""])//With user logged in.
     {
-        [userController SwitchToProfileViewWithUID:currentUser.uid];
+        [[[[[FIRDatabase database] reference] child:@"users-detail"] child:currentUser.uid] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+            if (snapshot.exists) {
+                [userController SwitchToProfileViewWithUID:currentUser.uid];
+            } else {
+                NSLog(@"There's no matched data in database under this authenticated user.");
+            }
+        }];
     }
     
     postItemController = [[PostItemViewController alloc] init];

@@ -90,7 +90,13 @@
             [self.delegate DisplayAlertWithTitle:@"Error" Message:[error localizedDescription]];
         }else{
             NSLog(@"Try Sign In As User: %@", user.uid);
-            [self.delegate SwitchToProfileViewWithUID:user.uid];
+            [[[ref child:@"users-detail"] child:user.uid] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot){
+                if (snapshot.exists) {
+                    [self.delegate SwitchToProfileViewWithUID:user.uid];
+                } else {
+                    [self.delegate DisplayAlertWithTitle:@"Error" Message:@"There's no matched data in database under this authenticated user."];
+                }
+            }];
         }
     }];
 }
