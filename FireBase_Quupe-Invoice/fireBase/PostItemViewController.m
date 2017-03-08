@@ -56,6 +56,7 @@
     [self.view addSubview:scrollView];
     
     imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width*245/375)];
+    imgView.contentMode = UIViewContentModeScaleAspectFill;
     imgView.image = [UIImage imageNamed:@"default-upload"];
     imgView.userInteractionEnabled = YES;
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectPicture)];

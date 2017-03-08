@@ -89,6 +89,7 @@
                 [userController SwitchToProfileViewWithUID:currentUser.uid];
             } else {
                 NSLog(@"There's no matched data in database under this authenticated user.");
+                [self resetBatchToken];
             }
         }];
     }

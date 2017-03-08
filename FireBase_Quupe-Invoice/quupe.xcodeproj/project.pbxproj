@@ -10,7 +10,6 @@
 		400CD242A228620EB37174F3 /* libPods-quupeUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 288AFBDBBA8E8D0269328467 /* libPods-quupeUITests.a */; };
 		4500C0A21D78DD9A004DF98A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4500C0A11D78DD9A004DF98A /* main.m */; };
 		4500C0A51D78DD9A004DF98A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4500C0A41D78DD9A004DF98A /* AppDelegate.m */; };
-		4500C0A81D78DD9A004DF98A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4500C0A71D78DD9A004DF98A /* ViewController.m */; };
 		4500C0AD1D78DD9A004DF98A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4500C0AC1D78DD9A004DF98A /* Assets.xcassets */; };
 		4500C0B01D78DD9A004DF98A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4500C0AE1D78DD9A004DF98A /* LaunchScreen.storyboard */; };
 		4500C0BB1D78DD9A004DF98A /* fireBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4500C0BA1D78DD9A004DF98A /* fireBaseTests.m */; };
@@ -115,8 +114,6 @@
 		4500C0A11D78DD9A004DF98A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4500C0A31D78DD9A004DF98A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4500C0A41D78DD9A004DF98A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4500C0A61D78DD9A004DF98A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		4500C0A71D78DD9A004DF98A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4500C0AC1D78DD9A004DF98A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4500C0AF1D78DD9A004DF98A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4500C0B11D78DD9A004DF98A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -371,8 +368,6 @@
 				45A6475B1DF38ACB00E3E111 /* TransactionTableCell2.xib */,
 				45650C3D1DC7C6E000F2DC09 /* PaymentViewController.h */,
 				45650C3E1DC7C6E000F2DC09 /* PaymentViewController.m */,
-				4500C0A61D78DD9A004DF98A /* ViewController.h */,
-				4500C0A71D78DD9A004DF98A /* ViewController.m */,
 				45C7AD6D1DDFABF6008A7376 /* QpTableView.h */,
 				45C7AD6E1DDFABF6008A7376 /* QpTableView.m */,
 				4500C0DD1D7B4E82004DF98A /* ItemTableCell.h */,
@@ -799,7 +794,6 @@
 				45D0FB581DF881790018E8D9 /* LenderProfileViewController.m in Sources */,
 				4505DE971DF27B20002930E5 /* QpTransTableView.m in Sources */,
 				45A88EA21E14ACCC0026584C /* QpTapButton.m in Sources */,
-				4500C0A81D78DD9A004DF98A /* ViewController.m in Sources */,
 				4529FBBA1E31A0B1004F7C3E /* FeedbackViewController.m in Sources */,
 				45A6EFE71D94553500EEE53D /* BatchClientPush.swift in Sources */,
 				45E1ADE91E2C659900A142A1 /* Reachability.m in Sources */,

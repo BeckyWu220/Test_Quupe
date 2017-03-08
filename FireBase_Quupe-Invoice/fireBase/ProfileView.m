@@ -99,7 +99,7 @@
     creditBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [creditBtn setTitleColor:[UIColor colorWithRed:145.0/255.0f green:144.0/255.0f blue:144.0/255.0f alpha:1.0f] forState:UIControlStateNormal];
     creditBtn.titleLabel.font = [UIFont fontWithName:@"SFUIText-Regular" size:12.0f];
-    [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"account"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+    [[[[ref child:@"users-detail"] child:appDelegate.currentUser.uid] child:@"account"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         if (snapshot.exists) {
             [creditBtn setTitle:[NSString stringWithFormat:@"Credits: $%.2f", [[snapshot.value objectForKey:@"earned"] floatValue]] forState:UIControlStateNormal];
         } else {

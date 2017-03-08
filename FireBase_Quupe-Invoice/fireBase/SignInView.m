@@ -8,6 +8,12 @@
 
 #import "SignInView.h"
 
+@interface SignInView()
+{
+    AppDelegate *appDelegate;
+}
+@end
+
 @implementation SignInView
 
 @synthesize ref;
@@ -20,6 +26,7 @@
     if (self)
     {
         ref = [[FIRDatabase database] reference];
+        appDelegate = [[UIApplication sharedApplication] delegate];
         
         self.backgroundColor = [UIColor whiteColor];
         
@@ -95,6 +102,7 @@
                     [self.delegate SwitchToProfileViewWithUID:user.uid];
                 } else {
                     [self.delegate DisplayAlertWithTitle:@"Error" Message:@"There's no matched data in database under this authenticated user."];
+                    [appDelegate resetBatchToken];
                 }
             }];
         }

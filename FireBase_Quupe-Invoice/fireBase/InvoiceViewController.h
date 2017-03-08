@@ -6,7 +6,6 @@
 //  Copyright © 2017 Wanqiao Wu. All rights reserved.
 //
 
-#import "ViewController.h"
 #import "AppDelegate.h"
 #import "QpButton.h"
 #import "PaymentViewController.h"
@@ -16,7 +15,7 @@
 @import Batch;
 #import "quupe-Swift.h"
 
-@interface InvoiceViewController : ViewController <QpButtonDelegate, PaymentViewControllerDelegate>
+@interface InvoiceViewController : UIViewController <QpButtonDelegate, PaymentViewControllerDelegate>
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) NSString *itemKey;

@@ -480,7 +480,7 @@
         if (snapshot.exists) {
             float targetUserEarned = [[snapshot.value objectForKey:@"earned"] floatValue];
             NSLog(@"Last earned: %.2f",targetUserEarned);
-            targetUserEarned += [[[itemInfo objectForKey:@"rTotal"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
+            targetUserEarned += [[[itemInfo objectForKey:@"subtotal"] stringByReplacingOccurrencesOfString:@"$" withString:@""] floatValue];
             NSLog(@"Now earned: %.2f",targetUserEarned);
             [[[[[ref child:@"users-detail"] child:[itemInfo objectForKey:@"targetUID"]] child:@"account"] child:@"earned"] setValue:[NSString stringWithFormat:@"%.2f", targetUserEarned]];
         }else{
