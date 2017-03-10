@@ -22,12 +22,16 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "Reachability.h"
 
+#import "ImageOperations.h"
+
 @class Reachability;
 
 
 @interface ItemBrowseViewController ()
 {
     AppDelegate *appDelegate;
+    NSMutableArray *itemImageRecords;
+    ImageOperations *pendingOperations;
 }
 
 @end
@@ -51,7 +55,8 @@
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         
         appDelegate = [[UIApplication sharedApplication] delegate];
-        
+        itemImageRecords = [[NSMutableArray alloc] init];
+        pendingOperations = [[ImageOperations alloc] init];
         
         self.tableView.backgroundColor = [UIColor whiteColor];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

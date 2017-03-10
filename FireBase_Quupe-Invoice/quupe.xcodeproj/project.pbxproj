@@ -50,6 +50,7 @@
 		45A88EA21E14ACCC0026584C /* QpTapButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 45A88EA11E14ACCC0026584C /* QpTapButton.m */; };
 		45A88EA41E15B3730026584C /* addBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 45A88EA31E15B3730026584C /* addBtn.png */; };
 		45B069FC1E10E37F00B0FE07 /* logoQuupeBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B069FB1E10E37F00B0FE07 /* logoQuupeBlue.png */; };
+		45B3F5A61E7366EB007032E0 /* ImageOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B3F5A51E7366EB007032E0 /* ImageOperations.m */; };
 		45BBD5C41D95631B00B27A31 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45BBD5C21D95631B00B27A31 /* UserViewController.m */; };
 		45C4AFB31DE64FE500279B01 /* ConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C4AFB21DE64FE500279B01 /* ConfirmViewController.m */; };
 		45C7AD671DDF5163008A7376 /* QpPriceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C7AD661DDF5163008A7376 /* QpPriceView.m */; };
@@ -179,6 +180,8 @@
 		45A88EA11E14ACCC0026584C /* QpTapButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QpTapButton.m; sourceTree = "<group>"; };
 		45A88EA31E15B3730026584C /* addBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addBtn.png; sourceTree = "<group>"; };
 		45B069FB1E10E37F00B0FE07 /* logoQuupeBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logoQuupeBlue.png; sourceTree = "<group>"; };
+		45B3F5A41E7366EB007032E0 /* ImageOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageOperations.h; sourceTree = "<group>"; };
+		45B3F5A51E7366EB007032E0 /* ImageOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageOperations.m; sourceTree = "<group>"; };
 		45BBD5C11D95631B00B27A31 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		45BBD5C21D95631B00B27A31 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		45C4AFB11DE64FE500279B01 /* ConfirmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmViewController.h; sourceTree = "<group>"; };
@@ -416,6 +419,8 @@
 				453FFB3D1E333CE000C1828F /* ReviewCell.xib */,
 				45CD57691E4C8D4A0072D5DF /* InvoiceViewController.h */,
 				45CD576A1E4C8D4A0072D5DF /* InvoiceViewController.m */,
+				45B3F5A41E7366EB007032E0 /* ImageOperations.h */,
+				45B3F5A51E7366EB007032E0 /* ImageOperations.m */,
 				4500C0AC1D78DD9A004DF98A /* Assets.xcassets */,
 				4500C0AE1D78DD9A004DF98A /* LaunchScreen.storyboard */,
 				4500C0B11D78DD9A004DF98A /* Info.plist */,
@@ -818,6 +823,7 @@
 				4515B53E1D8745B900D0CA3B /* Item.m in Sources */,
 				4500C0A21D78DD9A004DF98A /* main.m in Sources */,
 				45FD2A121DA5693C00016104 /* TransactionTableCell.m in Sources */,
+				45B3F5A61E7366EB007032E0 /* ImageOperations.m in Sources */,
 				45F806661DE784DE004D4736 /* QpBreakdownView.m in Sources */,
 				45E1ADEC1E2CB23C00A142A1 /* QpAsyncImage.m in Sources */,
 				451BF8011D88C2460036C795 /* PostItemViewController.m in Sources */,
