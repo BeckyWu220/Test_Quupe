@@ -110,12 +110,13 @@
         return;
     }
     
-    UIImage *thumbnail = [self thumbnailForImage:UIImagePNGRepresentation(self.imageRecord.image)];
-    if (thumbnail) {
-        self.imageRecord.image = thumbnail;
-        self.imageRecord.state = Scaled;
+    if (self.imageRecord.image){
+        UIImage *thumbnail = [self thumbnailForImage:UIImagePNGRepresentation(self.imageRecord.image)];
+        if (thumbnail) {
+            self.imageRecord.image = thumbnail;
+            self.imageRecord.state = Scaled;
+        }
     }
-    
 }
 
 - (UIImage *)thumbnailForImage:(NSData *)imgData
