@@ -247,6 +247,68 @@
     return 280;
 }
 
+#pragma UIScrollView Delegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    //Suspend all operations
+    [pendingOperations.downloadQueue setSuspended:true];
+    [pendingOperations.scaleQueue setSuspended:true];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate) {
+        //When users stopped dragging the tableview. Resume suspended operations.
+        [self loadImagesForOnscreenCells];
+        [pendingOperations.downloadQueue setSuspended:false];
+        [pendingOperations.scaleQueue setSuspended:false];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self loadImagesForOnscreenCells];
+    [pendingOperations.downloadQueue setSuspended:false];
+    [pendingOperations.scaleQueue setSuspended:false];
+}
+
+- (void)loadImagesForOnscreenCells
+{
+    NSArray *visibleIndexPaths = self.tableView.indexPathsForVisibleRows;
+    if (visibleIndexPaths) {
+        NSMutableSet *allPendingOperations = [[NSMutableSet alloc] initWithArray:pendingOperations.downloadsInProgress.allKeys];
+        [allPendingOperations unionSet:[[NSSet alloc] initWithArray:pendingOperations.scalesInProgress.allKeys]];
+        
+        NSMutableSet *toBeCancelled = allPendingOperations;
+        [toBeCancelled minusSet:[[NSSet alloc] initWithArray:visibleIndexPaths]];
+        
+        for (NSIndexPath *indexPath in toBeCancelled) {
+            NSOperation *downloadOperation = pendingOperations.downloadsInProgress[indexPath];
+            if (downloadOperation) {
+                [downloadOperation cancel];
+            }
+            [pendingOperations.downloadsInProgress removeObjectForKey:indexPath];
+            
+            NSOperation *scaleOperation = pendingOperations.scalesInProgress[indexPath];
+            if (scaleOperation) {
+                [scaleOperation cancel];
+            }
+            [pendingOperations.scalesInProgress removeObjectForKey:indexPath];
+        }
+        
+        NSMutableSet *toBeStarted = [[NSMutableSet alloc] initWithArray:visibleIndexPaths];
+        
+        for (NSIndexPath *indexPath in toBeStarted) {
+            ImageRecord *imgRecord = itemImageRecords[indexPath.row];
+            if (imgRecord.state == New) {
+                [self startDownloadForRecord:imgRecord IndexPath:indexPath];
+            }else if (imgRecord.state == Downloaded) {
+                [self startScaleForRecord:imgRecord IndexPath:indexPath];
+            }
+        }
+    }
+}
+
 - (void)startDownloadForRecord:(ImageRecord *)imgRecord IndexPath:(NSIndexPath *)indexPath
 {
     if (pendingOperations.downloadsInProgress[indexPath]) {
