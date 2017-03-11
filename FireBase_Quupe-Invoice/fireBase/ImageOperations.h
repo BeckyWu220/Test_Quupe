@@ -25,6 +25,8 @@ typedef enum : NSUInteger {
 @property ImageRecordState state;
 @property (strong, nonatomic) UIImage *image;
 
+- (id)initWithName:(NSString *)imgName URL:(NSURL *)imgURL;
+
 @end
 
 
@@ -43,11 +45,15 @@ typedef enum : NSUInteger {
 
 @property (strong, nonatomic) ImageRecord *imageRecord;
 
+- (id)initWithImageRecord:(ImageRecord *)imgRecord;
+
 @end
 
 
 @interface ImageScaler : NSOperation
 
 @property (strong, nonatomic) ImageRecord *imageRecord;
+
+- (id)initWithImageRecord:(ImageRecord *)imgRecord;
 
 @end

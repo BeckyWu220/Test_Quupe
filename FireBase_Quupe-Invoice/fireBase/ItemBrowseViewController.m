@@ -107,7 +107,7 @@
         }];*/
     }
     
-    [[[[ref child:@"items"] queryOrderedByChild:@"time"] queryLimitedToLast:50] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+    [[[[ref child:@"items"] queryOrderedByChild:@"time"] queryLimitedToLast:50] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSLog(@"EventListener!");
         
         NSMutableArray *newItemArray = [[NSMutableArray alloc] init];
@@ -122,37 +122,42 @@
             }
             
             self.itemArray = newItemArray;
+            
+            for (int j=0; j<self.itemArray
+                 .count; j++)
+            {
+                Item *item = [self.itemArray objectAtIndex:j];
+                ImageRecord *imgRecord = [[ImageRecord alloc] initWithName:item.title URL:item.photo];
+                [itemImageRecords addObject:imgRecord];
+                
+                /*dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                 
+                 //Background Thread --- Loading images.
+                 if (! picDic[[[self.itemArray objectAtIndex:j] key]])
+                 {
+                 NSData *imgData = [NSData dataWithContentsOfURL:[[self.itemArray objectAtIndex:j] photo]];
+                 if (imgData) {
+                 UIImage *thumbnail = [self thumbnailForImage:imgData];
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                 
+                 //Run UI Updates
+                 if (thumbnail) {
+                 [picDic setObject:thumbnail forKey:[[self.itemArray objectAtIndex:j] key]];
+                 [self.tableView reloadData];
+                 }else {
+                 NSLog(@"Fail to generate thumbnail for %@", [[self.itemArray objectAtIndex:j] title]);
+                 }
+                 });
+                 }else{
+                 NSLog(@"Fail to get image data for %@", [[self.itemArray objectAtIndex:j] title]);
+                 }
+                 }
+                 });*/
+            }
+            
             [self.tableView reloadData];
         }else{
             NSLog(@"Snapshot Not Exist in items of ItemBrowseVC.");
-        }
-        
-        for (int j=0; j<self.itemArray
-             .count; j++)
-        {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                
-                //Background Thread --- Loading images.
-                if (! picDic[[[self.itemArray objectAtIndex:j] key]])
-                {
-                    NSData *imgData = [NSData dataWithContentsOfURL:[[self.itemArray objectAtIndex:j] photo]];
-                    if (imgData) {
-                        UIImage *thumbnail = [self thumbnailForImage:imgData];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            
-                            //Run UI Updates
-                            if (thumbnail) {
-                                [picDic setObject:thumbnail forKey:[[self.itemArray objectAtIndex:j] key]];
-                                [self.tableView reloadData];
-                            }else {
-                                NSLog(@"Fail to generate thumbnail for %@", [[self.itemArray objectAtIndex:j] title]);
-                            }
-                        });
-                    }else{
-                        NSLog(@"Fail to get image data for %@", [[self.itemArray objectAtIndex:j] title]);
-                    }
-                }
-            });
         }
     
     }];
@@ -206,11 +211,13 @@
     cell.priceLabel.text = [NSString stringWithFormat:@"$%.2f/Day", [[itemArray objectAtIndex:indexPath.row] rentDay]];
     [cell.ratingView roundRating:[[itemArray objectAtIndex:indexPath.row] starCount]];
     
-    if(picDic[[[itemArray objectAtIndex:indexPath.row] key]])
-    {
-        cell.thumbnailImageView.image = [picDic objectForKey:[[itemArray objectAtIndex:indexPath.row] key]];
-    }else{
-        cell.thumbnailImageView.image = defaultImg;
+    ImageRecord *imgRecord = [itemImageRecords objectAtIndex:indexPath.row];
+    cell.thumbnailImageView.image = imgRecord.image;
+    
+    if (imgRecord.state == New) {
+        [self startDownloadForRecord:imgRecord IndexPath:indexPath];
+    }else if (imgRecord.state == Downloaded) {
+        [self startScaleForRecord:imgRecord IndexPath:indexPath];
     }
     
     
@@ -238,6 +245,48 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 280;
+}
+
+- (void)startDownloadForRecord:(ImageRecord *)imgRecord IndexPath:(NSIndexPath *)indexPath
+{
+    if (pendingOperations.downloadsInProgress[indexPath]) {
+        return;
+    }
+    ImageDownloader *downloader = [[ImageDownloader alloc] initWithImageRecord:imgRecord];
+    if (downloader) {
+        downloader.completionBlock = ^{
+            if (downloader.isCancelled) {
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [pendingOperations.downloadsInProgress removeObjectForKey:indexPath];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            });
+        };
+        
+        pendingOperations.downloadsInProgress[indexPath] = downloader;
+        [pendingOperations.downloadQueue addOperation:downloader];
+    }
+}
+
+- (void)startScaleForRecord:(ImageRecord *)imgRecord IndexPath:(NSIndexPath *)indexPath
+{
+    if (pendingOperations.scalesInProgress[indexPath]) {
+        return;
+    }
+    ImageScaler *scaler = [[ImageScaler alloc] initWithImageRecord:imgRecord];
+    scaler.completionBlock = ^{
+        if (scaler.isCancelled) {
+            return;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [pendingOperations.scalesInProgress removeObjectForKey:indexPath];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        });
+    };
+    
+    pendingOperations.scalesInProgress[indexPath] = scaler;
+    [pendingOperations.scaleQueue addOperation:scaler];
 }
 
 /*
