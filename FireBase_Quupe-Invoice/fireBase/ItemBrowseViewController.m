@@ -201,13 +201,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Item *item = [Item copyFromItem:[itemArray objectAtIndex:indexPath.row]];
+    Item *item = [itemArray objectAtIndex:indexPath.row];
     
     currentItemInfoVC = [[ItemInfoViewController alloc] initWithItem:item];
     
     [currentItemInfoVC loadImageFromURL:item.photo];
-    
-    item = nil;
     
     currentItemInfoVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:currentItemInfoVC animated:YES];
