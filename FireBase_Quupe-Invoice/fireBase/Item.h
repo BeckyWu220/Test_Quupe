@@ -29,6 +29,9 @@
 
 @property int transCount;
 
+@property (strong, nonatomic) NSDictionary *itemDic;
+
 - (id)initWithDictionary:(NSDictionary *)dic Key:(NSString *)k;
++ (Item *)copyFromItem: (Item *)item;
 
 @end

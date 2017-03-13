@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
+#import "ItemInfoViewController.h"
 
 @import Firebase;
 @import Batch;
+
+@class ItemInfoViewController;
 
 @interface ItemBrowseViewController : UITableViewController
 

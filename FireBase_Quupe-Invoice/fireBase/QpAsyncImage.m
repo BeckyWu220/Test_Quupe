@@ -87,4 +87,9 @@
     return toReturn;
 }
 
+- (void)dealloc
+{
+    NSLog(@"Dealloc QpAsyncImage.");
+}
+
 @end

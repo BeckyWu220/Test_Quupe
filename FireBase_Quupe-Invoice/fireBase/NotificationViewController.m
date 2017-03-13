@@ -90,7 +90,6 @@
                     
                     if (snapshot.exists) {
                         NSDictionary *chatTargetInfo = snapshot.value;
-                        NSLog(@"ChatTarget: %@", chatTargetInfo);
                         
                         NSString *userName = [chatTargetInfo objectForKey:@"name"];
                         NSURL *userIconURL = [NSURL URLWithString:[chatTargetInfo objectForKey:@"img"]];

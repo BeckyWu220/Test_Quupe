@@ -8,8 +8,6 @@
 
 #import "ItemBrowseViewController.h"
 
-#import "ItemInfoViewController.h"
-
 #import "ItemTableCell.h"
 
 #import "Item.h"
@@ -32,6 +30,7 @@
     AppDelegate *appDelegate;
     NSMutableArray *itemImageRecords;
     ImageOperations *pendingOperations;
+    ItemInfoViewController *currentItemInfoVC;
 }
 
 @end
@@ -51,7 +50,7 @@
         self.navigationItem.title = @"Item Browse";
         
         //Set backBarButton's title that would be shown in the ItemInfoView.
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"back" style:UIBarButtonItemStylePlain target:nil action:nil];
         
         appDelegate = [[UIApplication sharedApplication] delegate];
         itemImageRecords = [[NSMutableArray alloc] init];
@@ -202,13 +201,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ItemInfoViewController *itemInfoController = [[ItemInfoViewController alloc] initWithItem:[itemArray objectAtIndex:indexPath.row]];
+    Item *item = [Item copyFromItem:[itemArray objectAtIndex:indexPath.row]];
     
-    Item *item = [itemArray objectAtIndex:indexPath.row];
-    [itemInfoController loadImageFromURL:item.photo];
+    currentItemInfoVC = [[ItemInfoViewController alloc] initWithItem:item];
     
-    itemInfoController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:itemInfoController animated:YES];
+    [currentItemInfoVC loadImageFromURL:item.photo];
+    
+    item = nil;
+    
+    currentItemInfoVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:currentItemInfoVC animated:YES];
+    currentItemInfoVC = nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

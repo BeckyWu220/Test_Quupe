@@ -40,8 +40,6 @@
 @synthesize scrollView;
 @synthesize imageView;
 @synthesize nameLabel, infoLabel;
-@synthesize lender;
-@synthesize lenderUID, itemKey;
 @synthesize bookBtn;
 @synthesize ref;
 @synthesize currentItem;
@@ -54,9 +52,6 @@
         self.view.backgroundColor = [UIColor whiteColor];
         
         currentItem = item;
-        lender = item.lender;
-        lenderUID = item.uid;
-        itemKey = item.key;
         
         appDelegate = [[UIApplication sharedApplication] delegate];
         ref = [[FIRDatabase database] reference];
@@ -75,7 +70,7 @@
         [scrollView addSubview:imageView];
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, imageView.frame.origin.y + imageView.frame.size.height + 10.0f, self.view.frame.size.width - 2*10.0f, 24.0f)];
-        nameLabel.text = item.title;
+        nameLabel.text = currentItem.title;
         nameLabel.font = [UIFont fontWithName:@"SFUIText-Semibold" size:20.0f];//SFUIText-Regular, SFUIText-Medium
         nameLabel.textColor = [UIColor colorWithRed:72.0f/255.0f green:72.0f/255.0f blue:72.0f/255.0f alpha:1.0f];
         [scrollView addSubview:nameLabel];
@@ -83,17 +78,16 @@
         //In this view, the prices of an item should be read from firebase.
         //For now, since the missing info of prices in many item nodes, using calculation in priceView to make sure prices show properly. Need to rewrite this part later.
         priceView = [[QpPriceView alloc] initWithFrame:CGRectMake(0, self.nameLabel.frame.origin.y+self.nameLabel.frame.size.height + 10, [[UIScreen mainScreen] bounds].size.width, 64)];
-        [priceView calculateQuupePriceForItem:item];
+        [priceView calculateQuupePriceForItem:currentItem];
         [scrollView addSubview:priceView];
         
-        if (![item.uid isEqualToString:appDelegate.currentUser.uid]) {
-            lenderView = [[QpLenderView alloc] initWithFrame:CGRectMake(10.0f, priceView.frame.origin.y+priceView.frame.size.height, self.view.frame.size.width - 2*10.0f, 68.0f) LenderName:item.lender LenderUID:item.uid];
+        if (![currentItem.uid isEqualToString:appDelegate.currentUser.uid]) {
+            lenderView = [[QpLenderView alloc] initWithFrame:CGRectMake(10.0f, priceView.frame.origin.y+priceView.frame.size.height, self.view.frame.size.width - 2*10.0f, 68.0f) LenderName:currentItem.lender LenderUID:currentItem.uid];
             lenderView.delegate = self;
-            [lenderView.ratingView roundRating:item.starCount];
+            [lenderView.ratingView roundRating:currentItem.starCount];
             [scrollView addSubview:lenderView];
             
             UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SwitchToLenderProfile)];
-            tapRecognizer.delegate = self;
             [lenderView addGestureRecognizer:tapRecognizer];
             
             infoTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, lenderView.frame.origin.y+lenderView.frame.size.height, self.view.frame.size.width - 2*10.0f, 20.0f)];
@@ -110,7 +104,7 @@
         [scrollView addSubview:infoTitleLabel];
         
         infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, infoTitleLabel.frame.origin.y+infoTitleLabel.frame.size.height, self.view.frame.size.width - 2*10.0f, 0.25f*self.view.frame.size.width)];
-        infoLabel.text = item.info;
+        infoLabel.text = currentItem.info;
         infoLabel.numberOfLines = 0;
         infoLabel.lineBreakMode = NSLineBreakByWordWrapping;
         [infoLabel sizeToFit];
@@ -145,7 +139,9 @@
         reviewBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
         [reviewBtn setTitleColor:[UIColor colorWithRed:67.0/255.0f green:169.0/255.0f blue:242.0/255.0f alpha:1.0f] forState:UIControlStateNormal];
         reviewBtn.titleLabel.font = [UIFont fontWithName:@"SFUIText-Semibold" size:14.0f];
-        [self CountReviews];
+        
+        //[self CountReviews];
+        
         [scrollView addSubview:reviewBtn];
         
         [self DisplayDatePicker];
@@ -168,17 +164,19 @@
     // Dispose of any resources that can be recreated.
     if (self.isViewLoaded && self.view.window) {
         NSLog(@"ItemInfo Memory Warning.");
+    }else {
+        //self.imageView = nil;
     }
 }
 
 - (void)dealloc
 {
-    NSLog(@"ItemInfoViewController is Deallocated.");
+    NSLog(@"Dealloc ItemInfoViewController");
 }
 
 - (void)DisplayDatePicker
 {
-    if (![lenderUID isEqualToString:appDelegate.currentUser.uid]){
+    if (![currentItem.uid isEqualToString:appDelegate.currentUser.uid]){
         textTableView = [[QpTableView alloc] initWithFrame:CGRectMake(0, reviewBtn.frame.origin.y+reviewBtn.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 44.0*3) Data:[NSArray arrayWithObjects:@[@"Starts", @"", [NSNumber numberWithInteger:HORIZONTAL_DATEPICKER_TYPE]], @[@"Ends", @"", [NSNumber numberWithInteger:HORIZONTAL_DATEPICKER_TYPE]], @[@"Total", @"", [NSNumber numberWithInteger:HORIZONTAL_TEXT_TYPE]], nil]];
         textTableView.scrollDelegate = self;
         [scrollView addSubview:textTableView];
@@ -208,13 +206,14 @@
 //Need to load item image in this view
 - (void)loadImageFromURL:(NSURL *)photoURL
 {
-    [imageView loadImageFromURL:photoURL];
+    __weak NSURL *imgURL = photoURL;
+    [imageView loadImageFromURL:imgURL];
 }
 
 
 - (void)SendBookRequest{
     
-    if ([lenderUID isEqualToString: appDelegate.currentUser.uid])
+    if ([currentItem.uid isEqualToString: appDelegate.currentUser.uid])
     {
         [bookBtn setTitle:@"EDIT" forState:UIControlStateNormal];
         NSLog(@"EDIT ITEM.");
@@ -222,7 +221,7 @@
         
         if (transactable) {
             [bookBtn setTitle:@"BOOK" forState:UIControlStateNormal];
-            NSLog(@"BOOK %@ FROM %@!", nameLabel.text, lender);
+            NSLog(@"BOOK %@ FROM %@!", nameLabel.text, currentItem.lender);
             
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"d MMM yyyy"];
@@ -249,14 +248,14 @@
 - (void)SwitchToLoadReviews
 {
     NSLog(@"Load More Reviews");
-    FeedbackViewController *feedbackController = [[FeedbackViewController alloc] initWithItemKey:self.itemKey];
+    FeedbackViewController *feedbackController = [[FeedbackViewController alloc] initWithItemKey:currentItem.key];
     feedbackController.itemReviews = itemReviews;
     [self.navigationController pushViewController:feedbackController animated:YES];
 }
 
 - (void)CountReviews
 {
-    [[[[[ref child:@"users-detail"] child:lenderUID] child:@"reviews"] child:@"incoming"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+    [[[[[ref child:@"users-detail"] child:currentItem.uid] child:@"reviews"] child:@"incoming"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         if (snapshot.exists) {
             NSDictionary *retrieveDataDict = snapshot.value;
             NSArray *reviews = [retrieveDataDict allValues];
@@ -278,14 +277,15 @@
                         }
                         
                         NSString *itemNo = [[[snapshot.value allValues] objectAtIndex:j] objectForKey:@"itemNo"];
-                        if ([itemNo isEqualToString:self.itemKey]) {
+                        if ([itemNo isEqualToString:currentItem.key]) {
                             [itemReviews addObject:[reviews objectAtIndex:i]];
                         }
                         if (itemReviews.count > 0) {
                             [reviewBtn setTitle: [NSString stringWithFormat:@"See All Reviews (%lu)", (unsigned long)itemReviews.count] forState:UIControlStateNormal];
-                            [reviewBtn addTarget:self action:@selector(SwitchToLoadReviews) forControlEvents:UIControlEventTouchUpInside];
+                            __weak ItemInfoViewController *weakSelf = self;
+                            [reviewBtn addTarget:weakSelf action:@selector(SwitchToLoadReviews) forControlEvents:UIControlEventTouchUpInside];
                             
-                            [self DisplayNewestReview];
+                            [weakSelf DisplayNewestReview];
                         }
                         
                     }
@@ -436,7 +436,7 @@
     MessageViewController *msgViewController = [MessageViewController messagesViewController];
     
     msgViewController.navigationItem.title = lenderName;
-    msgViewController.targetUID = lenderUID;
+    msgViewController.targetUID = currentItem.uid;
     msgViewController.targetIcon = lenderIcon;
     
     msgViewController.senderId = appDelegate.currentUser.uid;

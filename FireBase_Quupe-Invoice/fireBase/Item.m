@@ -15,6 +15,7 @@
 @synthesize transCount;
 @synthesize rentDay;
 //@synthesize featr, live, rentWeek;
+@synthesize itemDic;
 
 - (id)initWithDictionary:(NSDictionary *)dic Key:(NSString *)k
 {
@@ -40,8 +41,15 @@
         self.uid = [[dic objectForKey:@"uid"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         transCount = 0;
+        
+        itemDic = [[NSDictionary alloc] initWithDictionary:dic];
     }
     return self;
+}
+
++ (Item *)copyFromItem: (Item *)item {
+    Item *copyItem = [[Item alloc] initWithDictionary:item.itemDic Key:item.key];
+    return copyItem;
 }
 
 @end

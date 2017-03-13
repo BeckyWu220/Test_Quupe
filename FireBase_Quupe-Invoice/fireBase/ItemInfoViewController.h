@@ -30,10 +30,6 @@
 
 @property (strong, nonatomic) QpPriceView *priceView;
 
-@property (strong, nonatomic) NSString *lender;
-@property (strong, nonatomic) NSString *lenderUID;
-@property (strong, nonatomic) NSString *itemKey;
-
 @property (strong, nonatomic) Item *currentItem;
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 

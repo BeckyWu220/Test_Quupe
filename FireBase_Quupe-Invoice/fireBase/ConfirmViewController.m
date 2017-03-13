@@ -89,6 +89,10 @@
     
 }
 
+- (void)dealloc {
+    NSLog(@"Dealloc ConfirmVC.");
+}
+
 - (void)clickConfirmBtn
 {
     NSLog(@"Click Confirm");
