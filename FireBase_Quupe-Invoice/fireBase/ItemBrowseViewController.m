@@ -286,8 +286,9 @@
     }
     ImageDownloader *downloader = [[ImageDownloader alloc] initWithImageRecord:imgRecord];
     if (downloader) {
-        downloader.completionBlock = ^{
-            if (downloader.isCancelled) {
+        __weak ImageDownloader *weakDownloader = downloader;
+        weakDownloader.completionBlock = ^{
+            if (weakDownloader.isCancelled) {
                 return;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -307,8 +308,9 @@
         return;
     }
     ImageScaler *scaler = [[ImageScaler alloc] initWithImageRecord:imgRecord];
-    scaler.completionBlock = ^{
-        if (scaler.isCancelled) {
+    __weak ImageScaler *weakScaler = scaler;
+    weakScaler.completionBlock = ^{
+        if (weakScaler.isCancelled) {
             return;
         }
         dispatch_async(dispatch_get_main_queue(), ^{

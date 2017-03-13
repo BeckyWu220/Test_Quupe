@@ -82,6 +82,7 @@
         self.imageRecord.image = [UIImage imageNamed:@"default-profile.jpg"];
         self.imageRecord.state = Failed;
     }
+    imageData = nil;
 }
 
 @end
