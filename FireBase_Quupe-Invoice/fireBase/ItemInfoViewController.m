@@ -166,6 +166,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    if (self.isViewLoaded && self.view.window) {
+        NSLog(@"ItemInfo Memory Warning.");
+    }
+}
+
+- (void)dealloc
+{
+    NSLog(@"ItemInfoViewController is Deallocated.");
 }
 
 - (void)DisplayDatePicker

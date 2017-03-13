@@ -18,7 +18,6 @@
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 
-@property (strong, nonatomic) NSMutableDictionary *picDic;
 @property (strong, nonatomic) UIImage *defaultImg;
 
 

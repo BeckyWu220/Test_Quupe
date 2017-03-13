@@ -40,7 +40,6 @@
 
 @synthesize itemArray;
 @synthesize ref;
-@synthesize picDic;
 @synthesize defaultImg;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -73,7 +72,6 @@
     
     self.itemArray = [[NSMutableArray alloc] init];
     
-    picDic = [[NSMutableDictionary alloc] init];
     defaultImg = [UIImage imageNamed:@"default-thumbnail.jpg"];
     
     [super viewDidLoad];
@@ -129,30 +127,7 @@
                 Item *item = [self.itemArray objectAtIndex:j];
                 ImageRecord *imgRecord = [[ImageRecord alloc] initWithName:item.title URL:item.photo];
                 [itemImageRecords addObject:imgRecord];
-                
-                /*dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                 
-                 //Background Thread --- Loading images.
-                 if (! picDic[[[self.itemArray objectAtIndex:j] key]])
-                 {
-                 NSData *imgData = [NSData dataWithContentsOfURL:[[self.itemArray objectAtIndex:j] photo]];
-                 if (imgData) {
-                 UIImage *thumbnail = [self thumbnailForImage:imgData];
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                 
-                 //Run UI Updates
-                 if (thumbnail) {
-                 [picDic setObject:thumbnail forKey:[[self.itemArray objectAtIndex:j] key]];
-                 [self.tableView reloadData];
-                 }else {
-                 NSLog(@"Fail to generate thumbnail for %@", [[self.itemArray objectAtIndex:j] title]);
-                 }
-                 });
-                 }else{
-                 NSLog(@"Fail to get image data for %@", [[self.itemArray objectAtIndex:j] title]);
-                 }
-                 }
-                 });*/
+        
             }
             
             [self.tableView reloadData];
@@ -220,7 +195,6 @@
         [self startScaleForRecord:imgRecord IndexPath:indexPath];
     }
     
-    
     //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
@@ -230,14 +204,9 @@
 {
     ItemInfoViewController *itemInfoController = [[ItemInfoViewController alloc] initWithItem:[itemArray objectAtIndex:indexPath.row]];
     
-    if (! picDic[[[self.itemArray objectAtIndex:indexPath.row] key]])
-    {
-        Item *item = [itemArray objectAtIndex:indexPath.row];
-        [itemInfoController loadImageFromURL:item.photo];
-    }else{
-        itemInfoController.imageView.image = [picDic objectForKey:[[itemArray objectAtIndex:indexPath.row] key]];
-    }
-        
+    Item *item = [itemArray objectAtIndex:indexPath.row];
+    [itemInfoController loadImageFromURL:item.photo];
+    
     itemInfoController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:itemInfoController animated:YES];
 }
