@@ -151,11 +151,11 @@
                 Item *item = [self.itemArray objectAtIndex:j];
                 ImageRecord *imgRecord;
                 
-                NSString *fullPath = [imageFolderPath stringByAppendingPathComponent: item.title];
+                NSString *fullPath = [imageFolderPath stringByAppendingPathComponent: item.key];
                 if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
-                    imgRecord = [[ImageRecord alloc] initWithName:item.title filePath:fullPath];
+                    imgRecord = [[ImageRecord alloc] initWithName:item.key filePath:fullPath];
                 }else {
-                    imgRecord = [[ImageRecord alloc] initWithName:item.title URL:item.photo];
+                    imgRecord = [[ImageRecord alloc] initWithName:item.key URL:item.photo];
                 }
 
                 [itemImageRecords addObject:imgRecord];
