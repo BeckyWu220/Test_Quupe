@@ -185,13 +185,23 @@
     cell.priceLabel.text = [NSString stringWithFormat:@"$%.2f/Day", [[itemArray objectAtIndex:indexPath.row] rentDay]];
     [cell.ratingView roundRating:[[itemArray objectAtIndex:indexPath.row] starCount]];
     
-    ImageRecord *imgRecord = [itemImageRecords objectAtIndex:indexPath.row];
-    cell.thumbnailImageView.image = imgRecord.image;
+    //ImageRecord *imgRecord = [itemImageRecords objectAtIndex:indexPath.row];
+    //cell.thumbnailImageView.image = imgRecord.image;
     
-    if (imgRecord.state == New) {
-        [self startDownloadForRecord:imgRecord IndexPath:indexPath];
-    }else if (imgRecord.state == Downloaded) {
-        [self startScaleForRecord:imgRecord IndexPath:indexPath];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: [[itemArray objectAtIndex:indexPath.row] title]];
+    if ([fileManager fileExistsAtPath:fullPath]) {
+        NSLog(@"Load cached image.");
+        cell.thumbnailImageView.image = [UIImage imageWithContentsOfFile:fullPath];
+    }else {
+        ImageRecord *imgRecord = [itemImageRecords objectAtIndex:indexPath.row];
+        cell.thumbnailImageView.image = imgRecord.image;
+        
+        if (imgRecord.state == New) {
+            [self startDownloadForRecord:imgRecord IndexPath:indexPath];
+        }else if (imgRecord.state == Downloaded) {
+            [self startScaleForRecord:imgRecord IndexPath:indexPath];
+        }
     }
     
     //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

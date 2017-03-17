@@ -116,6 +116,7 @@
         if (thumbnail) {
             self.imageRecord.image = thumbnail;
             self.imageRecord.state = Scaled;
+            [self saveThumbnailImage:thumbnail withName:self.imageRecord.name];
         }
     }
 }
@@ -135,6 +136,16 @@
     CFRelease(imageRef);
     
     return toReturn;
+}
+
+- (void)saveThumbnailImage:(UIImage *)image withName:(NSString *)name
+{
+    NSData *data = UIImageJPEGRepresentation(image, 1.0);
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: name];
+    NSLog(@"Image Saving At: %@", fullPath);
+    [fileManager createFileAtPath:fullPath contents:data attributes:nil];
+    
 }
 
 @end
