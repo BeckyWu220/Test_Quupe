@@ -104,6 +104,29 @@
         }];*/
     }
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor whiteColor];
+    self.refreshControl.tintColor = [UIColor colorWithRed:67.0/255.0f green:169.0/255.0f blue:242.0/255.0f alpha:1.0f];
+    [self.refreshControl addTarget:self action:@selector(reloadItemData) forControlEvents:UIControlEventValueChanged];
+    
+    [self loadItemDataFromFirebase];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+}
+
+- (void)reloadItemData
+{
+    [self loadItemDataFromFirebase];
+    
+    if (self.refreshControl) {
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Data Reloading..." attributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:67.0/255.0f green:169.0/255.0f blue:242.0/255.0f alpha:1.0f]}];
+        [self.refreshControl endRefreshing];
+    }
+}
+
+- (void)loadItemDataFromFirebase
+{
     [[[ref child:@"items"] queryOrderedByChild:@"time"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSLog(@"EventListener!");
         
@@ -126,18 +149,15 @@
                 Item *item = [self.itemArray objectAtIndex:j];
                 ImageRecord *imgRecord = [[ImageRecord alloc] initWithName:item.title URL:item.photo];
                 [itemImageRecords addObject:imgRecord];
-        
+                
             }
             
             [self.tableView reloadData];
         }else{
             NSLog(@"Snapshot Not Exist in items of ItemBrowseVC.");
         }
-    
+        
     }];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
 }
 
 - (UIImage *)thumbnailForImage:(NSData *)imgData
