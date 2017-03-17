@@ -37,6 +37,7 @@
 		453FFB3A1E32FC6100C1828F /* msgIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 453FFB391E32FC6100C1828F /* msgIcon.png */; };
 		453FFB3E1E333CE000C1828F /* ReviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 453FFB3C1E333CE000C1828F /* ReviewCell.m */; };
 		453FFB3F1E333CE000C1828F /* ReviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 453FFB3D1E333CE000C1828F /* ReviewCell.xib */; };
+		4546D8D41E7CAB3C009B4097 /* default-damaged.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4546D8D31E7CAB3C009B4097 /* default-damaged.jpg */; };
 		45650C3F1DC7C6E000F2DC09 /* PaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45650C3E1DC7C6E000F2DC09 /* PaymentViewController.m */; };
 		456C8BA61E0F1BF100505706 /* me.png in Resources */ = {isa = PBXBuildFile; fileRef = 456C8BA51E0F1BF100505706 /* me.png */; };
 		456C8BA81E0F1C4900505706 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 456C8BA71E0F1C4900505706 /* add.png */; };
@@ -163,6 +164,7 @@
 		453FFB3B1E333CE000C1828F /* ReviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReviewCell.h; sourceTree = "<group>"; };
 		453FFB3C1E333CE000C1828F /* ReviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReviewCell.m; sourceTree = "<group>"; };
 		453FFB3D1E333CE000C1828F /* ReviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReviewCell.xib; sourceTree = "<group>"; };
+		4546D8D31E7CAB3C009B4097 /* default-damaged.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "default-damaged.jpg"; sourceTree = "<group>"; };
 		45650C3D1DC7C6E000F2DC09 /* PaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentViewController.h; sourceTree = "<group>"; };
 		45650C3E1DC7C6E000F2DC09 /* PaymentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentViewController.m; sourceTree = "<group>"; };
 		456C8BA51E0F1BF100505706 /* me.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = me.png; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				456EF7AC1DED4A560095AFE1 /* arrow.png */,
 				4515B5301D86F66800D0CA3B /* Default-568h@2x.png */,
 				451BF7FC1D88676A0036C795 /* default-thumbnail.jpg */,
+				4546D8D31E7CAB3C009B4097 /* default-damaged.jpg */,
 				456C8BAE1E0F262600505706 /* default-upload.png */,
 				45EB9D921D90FDFB00BBA84B /* default-profile.jpg */,
 				452984761DAC0B1E00EBF881 /* greenDot.png */,
@@ -629,6 +632,7 @@
 				45EE27D31DEE3387006638E5 /* selectedStar.png in Resources */,
 				452984771DAC0B1E00EBF881 /* greenDot.png in Resources */,
 				45C7AD711DE0DD32008A7376 /* TextTableCell2.xib in Resources */,
+				4546D8D41E7CAB3C009B4097 /* default-damaged.jpg in Resources */,
 				45EB9D931D90FDFB00BBA84B /* default-profile.jpg in Resources */,
 				4500C0AD1D78DD9A004DF98A /* Assets.xcassets in Resources */,
 				45FC8B0F1DA445E700B05BB7 /* home.png in Resources */,

@@ -14,6 +14,8 @@ typedef enum : NSUInteger {
     New = 0,
     Downloaded,
     Scaled,
+    Saved,
+    Read,
     Failed
 } ImageRecordState;
 
@@ -22,10 +24,12 @@ typedef enum : NSUInteger {
 
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSURL *url;
+@property (strong, nonatomic) NSString *filePath;
 @property ImageRecordState state;
 @property (strong, nonatomic) UIImage *image;
 
 - (id)initWithName:(NSString *)imgName URL:(NSURL *)imgURL;
+- (id)initWithName:(NSString *)imgName filePath:(NSString *)filePath;
 
 @end
 
@@ -37,6 +41,9 @@ typedef enum : NSUInteger {
 
 @property (strong, nonatomic) NSMutableDictionary *scalesInProgress;
 @property (strong, nonatomic) NSOperationQueue *scaleQueue;
+
+@property (strong, nonatomic) NSMutableDictionary *readsInProgress;
+@property (strong, nonatomic) NSOperationQueue *readQueue;
 
 @end
 
@@ -51,6 +58,14 @@ typedef enum : NSUInteger {
 
 
 @interface ImageScaler : NSOperation
+
+@property (strong, nonatomic) ImageRecord *imageRecord;
+
+- (id)initWithImageRecord:(ImageRecord *)imgRecord;
+
+@end
+
+@interface ImageReader : NSOperation
 
 @property (strong, nonatomic) ImageRecord *imageRecord;
 

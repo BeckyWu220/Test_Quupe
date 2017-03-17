@@ -143,11 +143,21 @@
             
             self.itemArray = newItemArray;
             
+            NSString *imageFolderPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+            
             for (int j=0; j<self.itemArray
                  .count; j++)
             {
                 Item *item = [self.itemArray objectAtIndex:j];
-                ImageRecord *imgRecord = [[ImageRecord alloc] initWithName:item.title URL:item.photo];
+                ImageRecord *imgRecord;
+                
+                NSString *fullPath = [imageFolderPath stringByAppendingPathComponent: item.title];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
+                    imgRecord = [[ImageRecord alloc] initWithName:item.title filePath:fullPath];
+                }else {
+                    imgRecord = [[ImageRecord alloc] initWithName:item.title URL:item.photo];
+                }
+
                 [itemImageRecords addObject:imgRecord];
                 
             }
@@ -205,23 +215,15 @@
     cell.priceLabel.text = [NSString stringWithFormat:@"$%.2f/Day", [[itemArray objectAtIndex:indexPath.row] rentDay]];
     [cell.ratingView roundRating:[[itemArray objectAtIndex:indexPath.row] starCount]];
     
-    //ImageRecord *imgRecord = [itemImageRecords objectAtIndex:indexPath.row];
-    //cell.thumbnailImageView.image = imgRecord.image;
+    ImageRecord *imgRecord = [itemImageRecords objectAtIndex:indexPath.row];
+    cell.thumbnailImageView.image = imgRecord.image;
     
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: [[itemArray objectAtIndex:indexPath.row] title]];
-    if ([fileManager fileExistsAtPath:fullPath]) {
-        NSLog(@"Load cached image.");
-        cell.thumbnailImageView.image = [UIImage imageWithContentsOfFile:fullPath];
-    }else {
-        ImageRecord *imgRecord = [itemImageRecords objectAtIndex:indexPath.row];
-        cell.thumbnailImageView.image = imgRecord.image;
-        
-        if (imgRecord.state == New) {
-            [self startDownloadForRecord:imgRecord IndexPath:indexPath];
-        }else if (imgRecord.state == Downloaded) {
-            [self startScaleForRecord:imgRecord IndexPath:indexPath];
-        }
+    if (imgRecord.state == New) {
+        [self startDownloadForRecord:imgRecord IndexPath:indexPath];
+    }else if (imgRecord.state == Downloaded) {
+        [self startScaleForRecord:imgRecord IndexPath:indexPath];
+    }else if (imgRecord.state == Saved) {
+        [self startReadForRecord:imgRecord IndexPath:indexPath];
     }
     
     //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -253,6 +255,7 @@
     //Suspend all operations
     [pendingOperations.downloadQueue setSuspended:true];
     [pendingOperations.scaleQueue setSuspended:true];
+    [pendingOperations.readQueue setSuspended:true];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
@@ -262,6 +265,7 @@
         [self loadImagesForOnscreenCells];
         [pendingOperations.downloadQueue setSuspended:false];
         [pendingOperations.scaleQueue setSuspended:false];
+        [pendingOperations.readQueue setSuspended:false];
     }
 }
 
@@ -270,6 +274,7 @@
     [self loadImagesForOnscreenCells];
     [pendingOperations.downloadQueue setSuspended:false];
     [pendingOperations.scaleQueue setSuspended:false];
+    [pendingOperations.readQueue setSuspended:false];
 }
 
 - (void)loadImagesForOnscreenCells
@@ -278,6 +283,7 @@
     if (visibleIndexPaths) {
         NSMutableSet *allPendingOperations = [[NSMutableSet alloc] initWithArray:pendingOperations.downloadsInProgress.allKeys];
         [allPendingOperations unionSet:[[NSSet alloc] initWithArray:pendingOperations.scalesInProgress.allKeys]];
+        [allPendingOperations unionSet:[[NSSet alloc] initWithArray:pendingOperations.readsInProgress.allKeys]];
         
         NSMutableSet *toBeCancelled = allPendingOperations;
         [toBeCancelled minusSet:[[NSSet alloc] initWithArray:visibleIndexPaths]];
@@ -294,6 +300,12 @@
                 [scaleOperation cancel];
             }
             [pendingOperations.scalesInProgress removeObjectForKey:indexPath];
+            
+            NSOperation *readOperation = pendingOperations.readsInProgress[indexPath];
+            if (readOperation) {
+                [readOperation cancel];
+            }
+            [pendingOperations.readsInProgress removeObjectForKey:indexPath];
         }
         
         NSMutableSet *toBeStarted = [[NSMutableSet alloc] initWithArray:visibleIndexPaths];
@@ -304,6 +316,8 @@
                 [self startDownloadForRecord:imgRecord IndexPath:indexPath];
             }else if (imgRecord.state == Downloaded) {
                 [self startScaleForRecord:imgRecord IndexPath:indexPath];
+            }else if (imgRecord.state == Saved) {
+                [self startReadForRecord:imgRecord IndexPath:indexPath];
             }
         }
     }
@@ -345,12 +359,34 @@
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [pendingOperations.scalesInProgress removeObjectForKey:indexPath];
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         });
     };
     
     pendingOperations.scalesInProgress[indexPath] = scaler;
     [pendingOperations.scaleQueue addOperation:scaler];
+}
+
+- (void)startReadForRecord:(ImageRecord *)imgRecord IndexPath: (NSIndexPath *)indexPath
+{
+    if (pendingOperations.readsInProgress[indexPath]) {
+        return;
+    }
+    ImageReader *reader = [[ImageReader alloc] initWithImageRecord:imgRecord];
+    __weak ImageReader *weakReader = reader;
+    weakReader.completionBlock = ^{
+        if (weakReader.isCancelled) {
+            return;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [pendingOperations.readsInProgress removeObjectForKey:indexPath];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            
+        });
+    };
+    
+    pendingOperations.readsInProgress[indexPath] = reader;
+    [pendingOperations.readQueue addOperation:reader];
 }
 
 /*
