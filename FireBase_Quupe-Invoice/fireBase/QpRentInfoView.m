@@ -10,13 +10,14 @@
 
 @implementation QpRentInfoView
 
-- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange PhotoURL:(NSURL *)photoURL
+- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName ItemKey:(NSString *)itemKey RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange PhotoURL:(NSURL *)photoURL
 {
     self = [super initWithFrame:frame];
     if (self) {
         self.frame = frame;
         
         QpAsyncImage *imgView = [[QpAsyncImage alloc] initWithFrame:CGRectMake(5, 5, self.frame.size.width*0.3-5*2, self.frame.size.height - 5*2)];
+        imgView.imgName = itemKey;
         [imgView loadImageFromURL:photoURL];
         imgView.layer.cornerRadius = 4.0f;
         imgView.clipsToBounds = YES;

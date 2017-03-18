@@ -134,6 +134,7 @@
 - (void)loadCell:(TransactionTableCell *)cell AtRow:(NSInteger)row fromArray:(NSMutableArray *)trans
 {
     cell.imgView.image = [UIImage imageNamed:@"default-thumbnail.jpg"];
+    cell.imgView.imgName = [[trans objectAtIndex:row] objectForKey:@"key"];
     if ([[trans objectAtIndex:row] objectForKey:@"iPic"]) {
         [cell createThumbnailIconWithURL:[[NSURL alloc] initWithString:[[trans objectAtIndex:row] objectForKey:@"iPic"]]];
     }

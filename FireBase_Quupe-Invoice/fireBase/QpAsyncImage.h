@@ -13,6 +13,7 @@
 @property (strong, nonatomic) NSURL *imageURL;
 @property BOOL imgLoaded;
 @property (strong, nonatomic) UIImage *thumbnailImg;
+@property (strong, nonatomic) NSString *imgName;
 
 - (id)initWithImageView:(UIImageView *)imgView;
 - (void)loadImageFromURL:(NSURL *)imgURL;

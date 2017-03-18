@@ -8,13 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "QpRatingView.h"
-#import "QpAsyncImage.h"
 
 @interface ItemTableCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *nameLabel;
 @property (nonatomic, weak) IBOutlet UILabel *priceLabel;
-@property (nonatomic, weak) IBOutlet QpAsyncImage *thumbnailImageView;
+@property (nonatomic, weak) IBOutlet UIImageView *thumbnailImageView;
 @property (nonatomic, strong) QpRatingView *ratingView;
 
 @end

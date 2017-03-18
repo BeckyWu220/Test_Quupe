@@ -64,7 +64,7 @@
         scrollView.contentSize = currentScrollContentSize;
         [self.view addSubview:scrollView];
         
-        rentInfoView = [[QpRentInfoView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 80) ItemName:currentItem.title RentalPrice:itemRentalPrice RentRange:itemRentRange PhotoURL:currentItem.photo];
+        rentInfoView = [[QpRentInfoView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 80) ItemName:currentItem.title ItemKey:currentItem.key RentalPrice:itemRentalPrice RentRange:itemRentRange PhotoURL:currentItem.photo];
         [scrollView addSubview:rentInfoView];
         
         textTableView = [[QpTableView alloc] initWithFrame:CGRectMake(0,rentInfoView.frame.origin.y+rentInfoView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 44.0*2) Data:[NSArray arrayWithObjects:@[@"Transfer", @"Not Specified", [NSNumber numberWithInteger:HORIZONTAL_UIPICKER_TYPE], @[@"Pick Up", @"Meet Up", @"Delivery"]], @[@"Insurance", @"Not Specified", [NSNumber numberWithInteger:HORIZONTAL_UIPICKER_TYPE], @[@"Yes", @"No"]], nil]];

@@ -65,6 +65,7 @@
         [self.view addSubview:scrollView];
         
         imageView = [[QpAsyncImage alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width/1.3f)];
+        imageView.imgName = currentItem.key;
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.clipsToBounds = YES;
         [scrollView addSubview:imageView];

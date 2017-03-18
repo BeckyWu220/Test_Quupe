@@ -35,6 +35,7 @@
         userID = lenderUID;
         
         imgView = [[QpAsyncImage alloc] initWithFrame:CGRectMake(10, 64 + 10, 90, 90)];
+        imgView.imgName = lenderUID;
         imgView.contentMode = UIViewContentModeScaleAspectFill;
         imgView.layer.cornerRadius = imgView.frame.size.width / 2;
         imgView.clipsToBounds = YES;
@@ -168,6 +169,7 @@
     cell.itemNameLabel.text = item.title;
     cell.itemRentLabel.text = [NSString stringWithFormat:@"$%.2f/Day", item.rentDay];//This need to be changed to rent per day later.
     cell.itemTransNumberLabel.text = @"ItemTransactionCount";
+    cell.itemImgView.imgName = item.key;
     [cell.itemImgView loadImageFromURL:item.photo];
     
     return cell;

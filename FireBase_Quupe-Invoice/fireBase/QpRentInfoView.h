@@ -11,6 +11,6 @@
 
 @interface QpRentInfoView : UIView
 
-- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange PhotoURL:(NSURL *)photoURL;
+- (id)initWithFrame:(CGRect)frame ItemName:(NSString *)itemName ItemKey:(NSString *)itemKey RentalPrice:(float)rentalPrice RentRange:(NSString *)rentRange PhotoURL:(NSURL *)photoURL;
 
 @end

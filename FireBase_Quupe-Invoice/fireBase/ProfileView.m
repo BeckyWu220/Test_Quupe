@@ -59,6 +59,7 @@
 - (void) loadInfoFromUser:(User *)currentUser
 {
     imgView = [[QpAsyncImage alloc] initWithFrame:CGRectMake(10, 10, 90, 90)];
+    imgView.imgName = currentUser.uid;
     imgView.layer.cornerRadius = imgView.frame.size.width / 2;
     imgView.clipsToBounds = YES;
     //imgView.layer.borderWidth = 3.0f;
@@ -306,6 +307,7 @@
     cell.itemNameLabel.text = item.title;
     cell.itemRentLabel.text = [NSString stringWithFormat:@"$%.2f/Day", item.rentDay];//This need to be changed to rent per day later.
     cell.itemTransNumberLabel.text = [NSString stringWithFormat:@"Transactions: %d", item.transCount];
+    cell.itemImgView.imgName = item.key;
     [cell.itemImgView loadImageFromURL:item.photo];
     
     return cell;

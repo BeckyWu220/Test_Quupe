@@ -175,6 +175,7 @@
         cell.userNameLabel.text = [[userInfoArray objectAtIndex:indexPath.row] objectAtIndex:0];
         if ([[userInfoArray objectAtIndex:indexPath.row] objectAtIndex:1])
         {
+            cell.userIcon.imgName = [[userInfoArray objectAtIndex:indexPath.row] objectAtIndex:2];
             [cell createThumbnailIconWithURL:[[userInfoArray objectAtIndex:indexPath.row] objectAtIndex:1]];
         }else{
             cell.userIcon.image = [UIImage imageNamed:@"default-profile.jpg"];

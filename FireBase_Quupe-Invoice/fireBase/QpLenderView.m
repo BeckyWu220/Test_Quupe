@@ -32,6 +32,7 @@
         targetUID = lenderUID;
         
         imgView = [[QpAsyncImage alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 48.0f, 48.0f)];
+        imgView.imgName = lenderUID;
         imgView.contentMode = UIViewContentModeScaleAspectFill;
         imgView.layer.cornerRadius = imgView.frame.size.width/2;
         imgView.clipsToBounds = YES;
